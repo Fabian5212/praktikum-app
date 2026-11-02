@@ -1,10 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgb(75,63,224)"/><stop offset="1" stop-color="rgb(40,36,150)"/></linearGradient>
-  <clipPath id="eye"><circle cx="256" cy="334" r="178"/></clipPath></defs>
+  <defs><radialGradient id="g" cx="120" cy="60" r="600" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="rgb(30,33,52)"/><stop offset="1" stop-color="rgb(11,13,21)"/></radialGradient></defs>
   <rect width="512" height="512" rx="112" fill="url(#g)"/>
-  <path d="M392 98l30 30-30 30-30-30z" fill="rgb(255,190,60)"/>
-  <circle cx="256" cy="178" r="178" fill="rgb(255,248,238)" clip-path="url(#eye)"/>
-  <circle cx="256" cy="256" r="66" fill="rgb(255,107,74)"/>
-  <circle cx="256" cy="256" r="30" fill="rgb(26,29,41)"/>
-  <circle cx="274" cy="236" r="11" fill="rgb(255,248,238)"/>
+  <circle cx="620" cy="700" r="430" fill="none" stroke="rgb(139,120,255)" stroke-opacity=".45" stroke-width="16"/>
+  <polygon fill="rgb(206,212,236)" points="256.0,128.2 256.0,217.8 166.4,390.6 115.2,390.6"/><polygon fill="rgb(118,126,168)" points="256.0,128.2 396.8,390.6 345.6,390.6 256.0,217.8"/><polygon fill="rgb(206,212,236)" points="256.0,256.2 256.0,307.4 204.8,345.8"/><polygon fill="rgb(164,171,206)" points="256.0,256.2 307.2,345.8 256.0,307.4"/><polygon fill="rgb(206,212,236)" points="256.0,326.6 256.0,371.4 224.0,403.4"/><polygon fill="rgb(164,171,206)" points="256.0,326.6 288.0,403.4 256.0,371.4"/>
 </svg>

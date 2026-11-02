@@ -68,6 +68,9 @@
     go: hash => { location.hash = hash; }
   };
 
+  // Profil-Button im Seitenkopf → Einstellungen
+  document.addEventListener('click', e => { if (e.target.closest('[data-avatar]')) App.settings(false); });
+
   window.addEventListener('hashchange', () => {
     App.ui.transition(() => render(false), navKind(last, parse()));
   });

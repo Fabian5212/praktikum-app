@@ -8,11 +8,11 @@
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#F3EFE6" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#11131B" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#0B0D15">
+  <meta name="color-scheme" content="dark">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Einblick">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -20,12 +20,25 @@
   <!-- Schriften (einzige externe Quelle; ohne Internet greift die Systemschrift) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Outfit:wght@500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap">
 
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <a class="skip-link" href="#view">Zum Inhalt springen</a>
+
+  <!-- Hintergrund-Deko: Logo-Wasserzeichen und Lichtbögen (rein dekorativ) -->
+  <div class="bg-deco" aria-hidden="true">
+    <svg class="bg-logo" viewBox="0 0 100 100"><polygon points="50,6 50,34 22,88 6,88"/><polygon points="50,6 94,88 78,88 50,34" class="d"/><polygon points="50,46 50,62 34,74"/><polygon points="50,46 66,74 50,62" class="d"/></svg>
+    <svg class="bg-arcs" viewBox="0 0 400 900" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="arcA" x1="0" x2="1"><stop offset="0" stop-color="#8B78FF" stop-opacity="0"/><stop offset=".55" stop-color="#8B78FF" stop-opacity=".55"/><stop offset="1" stop-color="#5B8CFF" stop-opacity="0"/></linearGradient>
+        <linearGradient id="arcB" x1="0" x2="1"><stop offset="0" stop-color="#5B8CFF" stop-opacity="0"/><stop offset=".6" stop-color="#8B78FF" stop-opacity=".35"/><stop offset="1" stop-color="#8B78FF" stop-opacity="0"/></linearGradient>
+      </defs>
+      <path d="M120 300 C 260 260, 360 180, 420 60" stroke="url(#arcA)" stroke-width="1.4" fill="none"/>
+      <path d="M-20 900 C 120 780, 300 700, 420 640" stroke="url(#arcB)" stroke-width="1.2" fill="none"/>
+    </svg>
+  </div>
 
   <!-- Hier rendert der Router die aktuelle Seite hinein -->
   <main id="view" class="view" tabindex="-1" aria-live="polite"></main>

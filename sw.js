@@ -5,7 +5,7 @@
  * WICHTIG beim Weiterentwickeln: Nach Änderungen an Dateien VERSION erhöhen,
  * sonst bekommen installierte Apps die neuen Dateien erst verspätet.
  */
-const VERSION = 'einblick-v1.1.0';
+const VERSION = 'einblick-v2.0.0';
 const FONT_CACHE = 'einblick-fonts';
 
 // Alle Dateien der App (relativ zum Ordner des Service Workers)
@@ -30,6 +30,11 @@ const FILES = [
   'games/phishing.js',
   'games/phishing-data.js',
   'games/pc.js',
+  'img/games/kabel.png',
+  'img/games/tickets.png',
+  'img/games/phishing.png',
+  'img/games/pc.png',
+  'icons/logo.svg',
   'icons/icon.svg',
   'icons/icon-192.png',
   'icons/icon-512.png',

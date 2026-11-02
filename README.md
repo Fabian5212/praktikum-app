@@ -12,6 +12,8 @@ Eine mobile Web-App (PWA) für Schülerpraktikantinnen und -praktikanten, die ei
 - **Wissen:** die drei Bereiche erklärt, Wörterbuch mit über 50 Begriffen, gute Fragen zum Stellen
 - **Fazit:** Auswertung als Balkengrafik, persönliches Fazit, Export als Text und JSON, Import, alles löschen
 
+Das Design ist ein dunkles Glas-Design mit leuchtenden Akzentfarben pro Spiel bzw. Bereich (Farben zentral in `css/style.css` unter `:root`).
+
 Alle Daten bleiben **nur im Browser** (localStorage). Es gibt kein Backend und kein Tracking. Die einzige externe Quelle ist Google Fonts. Ohne Internet nimmt die App die Systemschrift.
 
 ## Technik
@@ -30,8 +32,9 @@ js/app.js           Router (#/seite) und Start
 js/views/*.js       die fünf Seiten
 js/data/*.js        Wissenstexte und Wörterbuch
 games/*.js          Minispiele und ihre Inhalte (*-data.js)
-icons/              App-Icons (SVG + PNG)
-tools/make-icons.js erzeugt die Icons neu: node tools/make-icons.js
+img/games/          Illustrationen der vier Spiele
+icons/              Logo (logo.svg) und App-Icons (SVG + PNG)
+tools/make-icons.js erzeugt Logo und Icons neu: node tools/make-icons.js
 ```
 
 ### Inhalte ändern

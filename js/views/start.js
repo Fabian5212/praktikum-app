@@ -60,8 +60,7 @@
     const got = App.badges.LIST.filter(b => s.badges[b.id]).length;
 
     view.innerHTML =
-      '<header class="page-head home-head"><div><p class="sub">' + greeting() + ',</p><h1>' + esc(s.name || 'du') + '</h1></div>' +
-      '<button class="icon-btn" id="st-settings" aria-label="Einstellungen">' + icon('settings') + '</button></header>' +
+      App.ui.pageHead(greeting() + ', ' + (s.name || 'du'), 'Deine Praktikumswoche') +
       heroHtml(s) +
 
       '<div class="quick">' +
@@ -73,7 +72,7 @@
       '<section class="card"><div class="card-head"><h2 class="h3">Dein Fortschritt</h2><span class="muted small">' + plays + (plays === 1 ? ' Spiel' : ' Spiele') + ' gespielt</span></div>' +
         '<div class="stats">' + games.map(k => {
           const g = App.games[k], st = s.games[k];
-          return '<a class="stat g-' + k + '" href="#/spiele/' + k + '">' + icon(g.icon) +
+          return '<a class="stat g-' + k + '" href="#/spiele/' + k + '"><img src="img/games/' + k + '.png" alt="" width="48" height="48">' +
             '<b>' + (st.plays ? st.best : '–') + '</b><span>' + esc(g.title) + '</span></a>';
         }).join('') + '</div></section>' +
 
@@ -85,7 +84,6 @@
         }).join('') + '</div></section>';
 
     view.querySelectorAll('[data-plan]').forEach(b => b.addEventListener('click', () => settings(false)));
-    view.querySelector('#st-settings').addEventListener('click', () => settings(false));
     view.querySelectorAll('[data-badge]').forEach(b => b.addEventListener('click', () => {
       const bd = App.badges.LIST.find(x => x.id === b.dataset.badge);
       const when = s.badges[bd.id];

@@ -30,6 +30,7 @@
     shield: '<path d="M12 2.5 4.5 5.5V11c0 5 3.2 8.8 7.5 10.5 4.3-1.7 7.5-5.5 7.5-10.5V5.5z"/><path d="m8.8 12 2.3 2.3 4.2-4.6"/>',
     cpu: '<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5" rx=".8"/><path d="M9.5 2.5V6M14.5 2.5V6M9.5 18v3.5M14.5 18v3.5M2.5 9.5H6M2.5 14.5H6M18 9.5h3.5M18 14.5h3.5"/>',
     edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.2-3.7 4.1-5.6 7.5-5.6s6.3 1.9 7.5 5.6"/>',
     settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
     monitor: '<rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8.5 21h7M12 16.5V21"/>',
     mic: '<rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5v4M8.5 21.5h7"/>',
@@ -237,11 +238,19 @@
     return '<span class="pill area-' + key + '">' + icon(a.icon) + esc(long ? a.label : a.short) + '</span>';
   }
 
-  /** Seitenkopf mit optionalem Zurück-Link */
+  /**
+   * Seitenkopf: Logo (oder Zurück-Button) | Titel + Untertitel, rechts der Profil-Button.
+   * Der Profil-Button öffnet die Einstellungen (Klick wird in app.js abgefangen).
+   */
   function pageHead(title, sub, backHref) {
     return '<header class="page-head">' +
-      (backHref ? '<a class="icon-btn back" href="' + backHref + '" aria-label="Zurück">' + icon('back') + '</a>' : '') +
-      '<div><h1>' + esc(title) + '</h1>' + (sub ? '<p class="sub">' + esc(sub) + '</p>' : '') + '</div></header>';
+      (backHref
+        ? '<a class="icon-btn round back" href="' + backHref + '" aria-label="Zurück">' + icon('back') + '</a>'
+        : '<img class="brand-logo" src="icons/logo.svg" alt="Einblick" width="46" height="46">') +
+      '<span class="head-div" aria-hidden="true"></span>' +
+      '<div class="head-txt"><h1>' + esc(title) + '</h1>' + (sub ? '<p class="sub">' + esc(sub) + '</p>' : '') + '</div>' +
+      '<button class="avatar" type="button" data-avatar aria-label="Profil und Einstellungen">' + icon('user') + '</button>' +
+    '</header>';
   }
 
   /* ---------- Weiche Übergänge (View Transitions API, sonst CSS-Animation) ---------- */
