@@ -136,10 +136,19 @@ button { cursor: pointer; }
   color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 700;
   transition: color .2s;
 }
-.tab-ico { display: grid; place-items: center; width: 52px; height: 30px; border-radius: 15px; transition: background .25s, transform .25s; }
+.tab-ico { display: grid; place-items: center; width: 52px; height: 30px; border-radius: 15px; transition: transform .25s; }
+.tabbar a { position: relative; z-index: 1; overflow: hidden; }
 .tabbar a.active { color: var(--brand); }
-.tabbar a.active .tab-ico { background: color-mix(in srgb, var(--brand) 15%, transparent); }
+.tabbar a.active .tab-ico { transform: translateY(-1px); }
 .tabbar a:active .tab-ico { transform: scale(.92); }
+/* Gleitende Markierung hinter dem aktiven Symbol (Position über --tab-index aus app.js) */
+.tab-pill {
+  position: absolute; z-index: 0; top: 9px; width: 52px; height: 30px; border-radius: 15px;
+  left: calc(8px + (100% - 16px) / 5 * (var(--tab-index, 0) + .5) - 26px);
+  background: color-mix(in srgb, var(--brand) 16%, transparent);
+  transition: left .45s cubic-bezier(.3, 1.35, .5, 1);
+  view-transition-name: tabpill;
+}
 
 /* ========== 4. Bausteine ========== */
 .card {
@@ -354,7 +363,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
   background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow);
   color: var(--ink); text-decoration: none;
   transition: transform .2s, box-shadow .2s;
-  animation: rise .4s ease both; animation-delay: calc(var(--i) * 60ms);
+  animation: rise .4s ease backwards; animation-delay: calc(var(--i) * 60ms);
 }
 .game-card:active { transform: scale(.98); }
 .game-card p { margin: 0 0 6px; color: var(--muted); font-size: 15px; line-height: 1.35; }
@@ -576,7 +585,7 @@ ol.flags li.good { background: color-mix(in srgb, var(--ok) 9%, var(--surface));
 .i-netzteil .part-art { width: 100%; height: 100%; }
 
 /* Ziehen-Kopie unter dem Finger */
-.drag-ghost { position: fixed; left: 0; top: 0; z-index: 70; pointer-events: none; opacity: .92; box-shadow: var(--shadow-lift); }
+.drag-ghost { animation: none !important; position: fixed; left: 0; top: 0; z-index: 70; pointer-events: none; opacity: .92; box-shadow: var(--shadow-lift); }
 .knode.drag-ghost { transform: none; }
 
 /* ========== 7. Tagebuch ========== */
@@ -681,6 +690,128 @@ ol.flags li.good { background: color-mix(in srgb, var(--ok) 9%, var(--surface));
 .confetti { position: fixed; inset: 0; pointer-events: none; z-index: 80; overflow: hidden; }
 .confetti i { position: absolute; top: -12px; width: 9px; height: 14px; border-radius: 2px; animation: fall 1.5s cubic-bezier(.3, .6, .5, 1) forwards; }
 @keyframes fall { to { transform: translate(var(--dx), 105vh) rotate(var(--r)); opacity: .8; } }
+
+/* ---------- Seiten- und Schrittübergänge (View Transitions API) ----------
+ * #view = ganze Seite, .vt-swap = der Teil, der bei einem „Schritt“ wechselt
+ * (Spielbereich, Tagebuch-Eintrag, Wissen-Inhalt). Navigation bleibt stehen.
+ * Die Art kommt aus app.js / ui.js als html[data-vt="forward|back|step|step-back|fade"].
+ */
+#view { view-transition-name: page; }
+.vt-swap { view-transition-name: swap; }
+.tabbar { view-transition-name: tabbar; }
+::view-transition-old(tabbar), ::view-transition-new(tabbar) { animation: none; }
+::view-transition-group(tabpill) { animation-duration: .45s; animation-timing-function: cubic-bezier(.3, 1.35, .5, 1); }
+::view-transition-group(page), ::view-transition-group(swap) { animation-duration: .4s; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+
+html[data-vt=forward]::view-transition-old(page), html[data-vt=forward]::view-transition-old(swap) { animation: vt-out-left .22s ease-in both; }
+html[data-vt=forward]::view-transition-new(page), html[data-vt=forward]::view-transition-new(swap) { animation: vt-in-right .42s cubic-bezier(.2, .8, .2, 1) both; }
+html[data-vt=back]::view-transition-old(page), html[data-vt=back]::view-transition-old(swap) { animation: vt-out-right .22s ease-in both; }
+html[data-vt=back]::view-transition-new(page), html[data-vt=back]::view-transition-new(swap) { animation: vt-in-left .42s cubic-bezier(.2, .8, .2, 1) both; }
+html[data-vt=step]::view-transition-old(swap) { animation: vt-out-left .2s ease-in both; }
+html[data-vt=step]::view-transition-new(swap) { animation: vt-in-right .4s cubic-bezier(.2, .8, .2, 1) both; }
+html[data-vt=step-back]::view-transition-old(swap) { animation: vt-out-right .2s ease-in both; }
+html[data-vt=step-back]::view-transition-new(swap) { animation: vt-in-left .4s cubic-bezier(.2, .8, .2, 1) both; }
+html[data-vt=fade]::view-transition-old(swap) { animation: fade-out .18s ease both; }
+html[data-vt=fade]::view-transition-new(swap) { animation: vt-zoom-in .35s cubic-bezier(.2, .8, .2, 1) both; }
+
+@keyframes vt-out-left  { to { opacity: 0; transform: translateX(-28px); } }
+@keyframes vt-out-right { to { opacity: 0; transform: translateX(28px); } }
+@keyframes vt-in-right  { from { opacity: 0; transform: translateX(36px); } }
+@keyframes vt-in-left   { from { opacity: 0; transform: translateX(-36px); } }
+@keyframes vt-zoom-in   { from { opacity: 0; transform: scale(.97); } }
+
+/* Fallback ohne View Transitions (z. B. Firefox): neuer Inhalt gleitet herein */
+.vt-swap.step-in { animation: vt-in-right .38s cubic-bezier(.2, .8, .2, 1) both; }
+
+/* ---------- Gestaffeltes Einblenden ---------- */
+/* backwards statt both: nach dem Einblenden gibt die Animation transform wieder frei (für Hover) */
+.quick-btn, .stat, .answer, .level-btn, .part, .badge { animation: rise .45s cubic-bezier(.2, .8, .2, 1) backwards; }
+.quick-btn:nth-child(2), .stat:nth-child(2), .answer:nth-child(2), .level-btn:nth-child(2), .part:nth-child(2), .badge:nth-child(2) { animation-delay: 50ms; }
+.quick-btn:nth-child(3), .stat:nth-child(3), .answer:nth-child(3), .level-btn:nth-child(3), .part:nth-child(3), .badge:nth-child(3) { animation-delay: 100ms; }
+.stat:nth-child(4), .answer:nth-child(4), .level-btn:nth-child(4), .part:nth-child(4), .badge:nth-child(4) { animation-delay: 150ms; }
+.level-btn:nth-child(5), .part:nth-child(5), .badge:nth-child(n+5) { animation-delay: 200ms; }
+.part:nth-child(n+6), .badge:nth-child(n+9) { animation-delay: 250ms; }
+
+/* ---------- Wellen-Effekt beim Antippen ---------- */
+.btn, .quick-btn, .answer, .seg-btn, .chip-btn, .level-btn, .day-tab, .game-card, .stat, .wday, .icon-btn { position: relative; overflow: hidden; isolation: isolate; }
+.ripple {
+  position: absolute; z-index: -1; border-radius: 50%; pointer-events: none;
+  background: currentColor; opacity: .18;
+  transform: scale(0); animation: ripple .6s ease-out forwards;
+}
+@keyframes ripple { to { transform: scale(1); opacity: 0; } }
+
+/* ---------- Hover: Symbole blinken auf, Karten heben sich (nur Maus/Trackpad) ---------- */
+@media (hover: hover) and (pointer: fine) {
+  .quick-btn, .game-card, .stat, .lex-item, .level-btn:not(:disabled), .part, .answer:not(:disabled), .card.area-card, .badge, .day-tab, .seg-btn, .chip-btn, .icon-btn, .btn {
+    transition: transform .25s cubic-bezier(.2, .8, .2, 1), box-shadow .25s, border-color .25s, background .2s;
+  }
+  .quick-btn:hover, .game-card:hover, .stat:hover, .lex-item:hover, .level-btn:not(:disabled):hover, .part:hover, .answer:not(:disabled):hover, .day-tab:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lift);
+    border-color: color-mix(in srgb, var(--a, var(--brand)) 45%, var(--line));
+  }
+  .btn:hover, .icon-btn:hover, .seg-btn:hover, .chip-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
+  .btn:active, .quick-btn:active, .game-card:active { transform: scale(.97); }
+
+  /* Symbole blinken kurz auf */
+  .quick-btn:hover .ico, .icon-btn:hover .ico, .tabbar a:hover .ico, .stat:hover .ico, .btn:hover .ico,
+  .link-btn:hover .ico, .seg-btn:hover .ico, .level-btn:not(:disabled):hover .lv-n, .lex-item:hover .pill .ico,
+  .area-card summary:hover .area-ico, .badge:hover .badge-ico, .knode:hover .ico, .li-ico:hover {
+    animation: icon-blink .6s cubic-bezier(.3, 1.4, .5, 1);
+  }
+  .game-card:hover .game-art { animation: art-pop .7s cubic-bezier(.3, 1.4, .5, 1); box-shadow: 0 8px 26px color-mix(in srgb, var(--a) 55%, transparent); }
+  .tabbar a:hover { color: var(--ink); }
+  .tabbar a.active:hover { color: var(--brand); }
+
+  /* Glanz, der über Hauptbuttons und Abzeichen läuft */
+  .btn.primary::after, .badge.on .badge-ico::after, .game-art::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / .45) 50%, transparent 65%);
+    transform: translateX(-120%);
+  }
+  .btn.primary:hover::after, .badge.on:hover .badge-ico::after, .game-card:hover .game-art::after { animation: shine .8s ease; }
+  .badge-ico, .game-art { position: relative; overflow: hidden; }
+
+  /* Kabel-Geräte: ohne translateY, weil sie per translate(-50%,-50%) zentriert sind */
+  .knode:hover { border-color: var(--brand); transform: translate(-50%, -50%) scale(1.06); }
+}
+
+@keyframes icon-blink {
+  0%   { transform: scale(1); filter: none; }
+  35%  { transform: scale(1.25) rotate(-8deg); filter: brightness(1.35) drop-shadow(0 0 6px currentColor); }
+  65%  { transform: scale(.94) rotate(3deg); filter: brightness(1.15) drop-shadow(0 0 3px currentColor); }
+  100% { transform: scale(1); filter: none; }
+}
+@keyframes art-pop { 0% { transform: none; } 40% { transform: scale(1.1) rotate(-6deg); } 70% { transform: scale(.97) rotate(2deg); } 100% { transform: none; } }
+@keyframes shine { to { transform: translateX(120%); } }
+
+/* ---------- Kleine Spiel-Effekte ---------- */
+/* Neues Kabel „zeichnet“ sich vom ersten zum zweiten Gerät */
+.kabel-lines line.fresh:not(.wl) { stroke-dasharray: 1; stroke-dashoffset: 1; animation: line-draw .45s cubic-bezier(.2, .8, .2, 1) forwards; }
+.kabel-lines line.wl.fresh { animation: fade-in .5s ease both; }
+@keyframes line-draw { to { stroke-dashoffset: 0; } }
+/* Verbundene Geräte leuchten kurz */
+.knode.zap { animation: zap .6s ease; }
+@keyframes zap {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 60%, transparent); }
+  100% { box-shadow: 0 0 0 16px transparent; }
+}
+/* Eingebautes PC-Teil: Platz leuchtet auf */
+.pc-slot.filled { animation: slot-flash .7s ease; }
+@keyframes slot-flash { 0% { box-shadow: 0 0 0 0 rgb(255 190 60 / .7); } 100% { box-shadow: 0 0 0 14px rgb(255 190 60 / 0); } }
+/* Sterne ploppen nacheinander */
+.star.bounce .ico { animation: star-pop .45s cubic-bezier(.3, 1.6, .5, 1) both; animation-delay: var(--d, 0ms); }
+@keyframes star-pop { 0% { transform: scale(.5) rotate(-30deg); } 60% { transform: scale(1.3) rotate(8deg); } 100% { transform: none; } }
+/* Ergebnis: Pokal springt herein */
+.result-ico { animation: trophy-in .7s cubic-bezier(.3, 1.6, .5, 1) both .1s; }
+@keyframes trophy-in { from { transform: scale(0) rotate(-25deg); opacity: 0; } }
+.score span { display: inline-block; font-variant-numeric: tabular-nums; }
+/* Hero: Punktraster driftet langsam */
+.hero::after { animation: drift 24s linear infinite; }
+@keyframes drift { to { background-position: 160px 80px; } }
+/* Richtig/Falsch-Antwort ploppt */
+.answer.right, .answer.wrong { animation: pop .35s cubic-bezier(.3, 1.4, .5, 1) backwards; }
 
 /* Weniger Bewegung, wenn im System eingestellt */
 @media (prefers-reduced-motion: reduce) {

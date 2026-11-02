@@ -244,5 +244,71 @@
       '<div><h1>' + esc(title) + '</h1>' + (sub ? '<p class="sub">' + esc(sub) + '</p>' : '') + '</div></header>';
   }
 
-  App.ui = { icon, hydrateIcons, esc, toast, sheet, draggable, confetti, formatDate, debounce, shuffle, areaPill, pageHead, reducedMotion, WEEKDAYS, WD_SHORT };
+  /* ---------- Weiche Übergänge (View Transitions API, sonst CSS-Animation) ---------- */
+  const canTransition = () => !!document.startViewTransition && !reducedMotion();
+  let vtId = 0;
+
+  /** Animation neu starten (Klasse entfernen, Reflow erzwingen, wieder setzen) */
+  function replay(el, cls) {
+    if (!el) return;
+    el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+  }
+
+  /**
+   * Führt fn() als animierten Übergang aus.
+   * kind: 'forward' | 'back' (Seitenwechsel), 'step' (nächster Spielschritt), 'fade'
+   * Welche Animation läuft, legt das CSS über html[data-vt="…"] fest.
+   * Animiert wird das Element mit der Klasse .vt-swap (Spielbereich, Tagebuch-Eintrag …).
+   */
+  function transition(fn, kind) {
+    kind = kind || 'step';
+    if (!canTransition()) {
+      fn();
+      if (!reducedMotion() && kind !== 'forward' && kind !== 'back') replay(document.querySelector('.vt-swap'), 'step-in');
+      return;
+    }
+    const id = ++vtId;
+    const root = document.documentElement;
+    root.dataset.vt = kind;
+    document.startViewTransition(fn).finished.finally(() => { if (id === vtId) delete root.dataset.vt; });
+  }
+  const step = fn => transition(fn, 'step');
+
+  /* ---------- Wellen-Effekt beim Antippen (Touch-Feedback) ---------- */
+  const RIPPLE = '.btn, .quick-btn, .answer, .seg-btn, .chip-btn, .level-btn, .day-tab, .game-card, .stat, .wday, .tabbar a, .icon-btn';
+  document.addEventListener('pointerdown', e => {
+    if (reducedMotion()) return;
+    const el = e.target.closest(RIPPLE);
+    if (!el || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    const size = Math.max(r.width, r.height) * 2;
+    const s = document.createElement('span');
+    s.className = 'ripple';
+    s.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + (e.clientX - r.left - size / 2) + 'px;top:' + (e.clientY - r.top - size / 2) + 'px';
+    el.appendChild(s);
+    setTimeout(() => s.remove(), 650);
+  });
+
+  /* ---------- Zahlen hochzählen: <span data-count="1234"> ---------- */
+  function countUp(root) {
+    root.querySelectorAll('[data-count]:not([data-counted])').forEach(el => {
+      el.dataset.counted = '1';
+      const end = +el.dataset.count;
+      if (reducedMotion() || !end) { el.textContent = end; return; }
+      const t0 = performance.now(), dur = 900;
+      el.textContent = '0';
+      const frame = now => {
+        const p = Math.min(1, (now - t0) / dur);
+        el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3)));   // ease-out
+        if (p < 1) requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    });
+  }
+  // Startet automatisch, sobald irgendwo in der Ansicht ein [data-count] auftaucht
+  const viewEl = document.getElementById('view');
+  new MutationObserver(() => countUp(viewEl)).observe(viewEl, { childList: true, subtree: true });
+
+  App.ui = { icon, hydrateIcons, esc, toast, sheet, draggable, confetti, formatDate, debounce, shuffle, areaPill, pageHead, reducedMotion,
+             canTransition, transition, step, replay, WEEKDAYS, WD_SHORT };
 })(window.App);

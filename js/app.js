@@ -6,8 +6,11 @@
   'use strict';
 
   const view = document.getElementById('view');
+  const tabbar = document.querySelector('.tabbar');
+  const TABS = ['start', 'spiele', 'tagebuch', 'wissen', 'fazit'];
   let cleanup = null;     // Aufräumfunktion der aktuellen Seite (z. B. Timer stoppen)
   let current = '';
+  let last = null;        // zuletzt gezeigte Route { page, params }
 
   function parse() {
     const parts = (location.hash || '#/start').replace(/^#\/?/, '').split('/').filter(Boolean);
@@ -25,12 +28,14 @@
     if (typeof cleanup === 'function') cleanup();
     App.router.prev = current;
     current = page;
+    last = { page, params };
 
     cleanup = App.views[page](view, params) || null;
     App.ui.hydrateIcons(view);
 
-    // aktiven Tab markieren
-    document.querySelectorAll('.tabbar a').forEach(a => {
+    // aktiven Tab markieren; die Markierung (.tab-pill) gleitet per CSS zur neuen Position
+    tabbar.style.setProperty('--tab-index', Math.max(0, TABS.indexOf(page)));
+    tabbar.querySelectorAll('a').forEach(a => {
       const on = a.dataset.tab === page;
       a.classList.toggle('active', on);
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
@@ -40,8 +45,21 @@
       window.scrollTo(0, y);
     } else {
       window.scrollTo(0, 0);
-      view.classList.remove('enter'); void view.offsetWidth; view.classList.add('enter');
+      // Ohne View-Transition-Unterstützung (z. B. Firefox) wenigstens einblenden
+      if (!App.ui.canTransition()) App.ui.replay(view, 'enter');
     }
+  }
+
+  /**
+   * Art des Übergangs: Tab weiter rechts / tiefer → 'forward', zurück → 'back',
+   * gleiche Ebene derselben Seite (z. B. Wissen-Reiter) → 'step'
+   */
+  function navKind(from, to) {
+    if (!from) return 'fade';
+    if (from.page !== to.page) return TABS.indexOf(to.page) > TABS.indexOf(from.page) ? 'forward' : 'back';
+    // Nur bei den Spielen ist eine Unterseite wirklich „tiefer“ (Liste → Spiel)
+    if (to.page === 'spiele' && to.params.length !== from.params.length) return to.params.length > from.params.length ? 'forward' : 'back';
+    return 'step';
   }
 
   App.router = {
@@ -50,7 +68,9 @@
     go: hash => { location.hash = hash; }
   };
 
-  window.addEventListener('hashchange', () => render(false));
+  window.addEventListener('hashchange', () => {
+    App.ui.transition(() => render(false), navKind(last, parse()));
+  });
 
   // Icons in der Navigation einsetzen und erste Seite zeigen
   App.ui.hydrateIcons(document.querySelector('.tabbar'));

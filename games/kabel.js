@@ -82,7 +82,7 @@
           '<span class="lv-n">' + (locked ? icon('lock') : i + 1) + '</span><span class="lv-t">' + esc(L.title) + '</span>' +
           '<span class="lv-s">' + (st.levels[i] ? st.levels[i] + ' Pkt.' : locked ? 'gesperrt' : 'offen') + '</span></button>';
       }).join('') + '</div></div>';
-    el.querySelectorAll('.level-btn').forEach(b => b.addEventListener('click', () => play(el, +b.dataset.l)));
+    el.querySelectorAll('.level-btn').forEach(b => b.addEventListener('click', () => App.ui.step(() => play(el, +b.dataset.l))));
   }
 
   function play(el, li) {
@@ -115,12 +115,19 @@
       hint.classList.toggle('bad', !!bad);
     }
 
+    let drawn = new Set();   // schon gezeichnete Kabel – nur neue werden animiert
+
     function draw() {
+      const now = new Set();
       svg.innerHTML = links.map(([a, b]) => {
         const A = nodes[a], B = nodes[b];
         const wl = WIRELESS.includes(A.type) || WIRELESS.includes(B.type);
-        return '<line x1="' + A.x + '" y1="' + A.y + '" x2="' + B.x + '" y2="' + B.y + '" class="' + (wl ? 'wl' : '') + '"/>';
+        const key = a + '-' + b;
+        now.add(key);
+        // pathLength="1" → das Kabel kann sich per stroke-dashoffset von 0 bis 1 „zeichnen“
+        return '<line pathLength="1" x1="' + A.x + '" y1="' + A.y + '" x2="' + B.x + '" y2="' + B.y + '" class="' + (wl ? 'wl' : '') + (drawn.has(key) ? '' : ' fresh') + '"/>';
       }).join('');
+      drawn = now;
       el.querySelector('#k-prog').textContent = links.length + '/' + needed + ' Verbindungen';
       el.querySelector('#k-err').innerHTML = icon('x') + mistakes;
       board.querySelectorAll('.knode').forEach(b => {
@@ -164,7 +171,9 @@
       const wl = WIRELESS.includes(nodes[a].type) || WIRELESS.includes(nodes[b].type);
       say(wl ? 'WLAN-Verbindung steht.' : 'Kabel steckt.');
       draw();
-      if (links.length === needed) setTimeout(solved, 350);
+      // beide Geräte kurz aufleuchten lassen
+      [a, b].forEach(id => App.ui.replay(board.querySelector('[data-id="' + id + '"]'), 'zap'));
+      if (links.length === needed) setTimeout(() => App.ui.step(solved), 550);
     }
 
     function solved() {
@@ -190,10 +199,10 @@
         '<button class="btn ghost" id="k-again">' + icon('play') + 'Nochmal spielen</button>' +
         '<button class="btn ghost" id="k-sel">' + icon('list') + 'Levelübersicht</button></div>';
       const nx = el.querySelector('#k-next');
-      nx && nx.addEventListener('click', () => play(el, li + 1));
-      el.querySelector('#k-again').addEventListener('click', () => play(el, li));
-      el.querySelector('#k-sel').addEventListener('click', () => levelSelect(el));
-      el.scrollIntoView({ block: 'start' });
+      nx && nx.addEventListener('click', () => App.ui.step(() => play(el, li + 1)));
+      el.querySelector('#k-again').addEventListener('click', () => App.ui.step(() => play(el, li)));
+      el.querySelector('#k-sel').addEventListener('click', () => App.ui.step(() => levelSelect(el)));
+      window.scrollTo(0, 0);
     }
 
     board.querySelectorAll('.knode').forEach(btn => {
@@ -208,7 +217,7 @@
       });
     });
     el.querySelector('#k-reset').addEventListener('click', () => { links = []; selected = null; say('Alle Kabel gelöst.'); draw(); });
-    el.querySelector('#k-levels').addEventListener('click', () => levelSelect(el));
+    el.querySelector('#k-levels').addEventListener('click', () => App.ui.step(() => levelSelect(el)));
     draw();
   }
 

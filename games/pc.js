@@ -140,14 +140,19 @@
       App.ui.confetti();
       setTimeout(() => {
         if (!el.isConnected) return;
-        el.innerHTML = App.gameKit.resultHtml({
-          title: 'Dein PC läuft!', score, isBest, sub: secs + ' Sekunden · ' + mistakes + ' Fehler',
-          learnTitle: 'Die Bauteile im Überblick',
-          learn: PARTS.map(p => '<li><span class="li-ico">' + icon('cpu') + '</span><div><b>' + esc(p.name) + '</b><br>' + esc(p.info) + '</div></li>').join('')
-        }) + '<div class="stack"><button class="btn primary" id="pc-again">' + icon('play') + 'Nochmal bauen</button>' +
-          '<a class="btn ghost" href="#/spiele">' + icon('back') + 'Zu den Spielen</a></div>';
-        el.querySelector('#pc-again').addEventListener('click', () => play(el));
+        App.ui.step(() => showResult(secs, score, isBest));
       }, App.ui.reducedMotion() ? 300 : 1600);
+    }
+
+    function showResult(secs, score, isBest) {
+      el.innerHTML = App.gameKit.resultHtml({
+        title: 'Dein PC läuft!', score, isBest, sub: secs + ' Sekunden · ' + mistakes + ' Fehler',
+        learnTitle: 'Die Bauteile im Überblick',
+        learn: PARTS.map(p => '<li><span class="li-ico">' + icon('cpu') + '</span><div><b>' + esc(p.name) + '</b><br>' + esc(p.info) + '</div></li>').join('')
+      }) + '<div class="stack"><button class="btn primary" id="pc-again">' + icon('play') + 'Nochmal bauen</button>' +
+        '<a class="btn ghost" href="#/spiele">' + icon('back') + 'Zu den Spielen</a></div>';
+      el.querySelector('#pc-again').addEventListener('click', () => App.ui.step(() => play(el)));
+      window.scrollTo(0, 0);
     }
 
     el.querySelectorAll('.part').forEach(btn => {

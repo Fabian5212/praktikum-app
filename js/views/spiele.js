@@ -20,7 +20,7 @@
           '<div class="learnbox">' + icon('bulb') + '<div><b>Das lernst du:</b> ' + esc(g.learn) + '</div></div>' +
           '<button class="btn primary block" id="g-start">' + icon('play') + 'Los geht\'s</button>' +
         '</div>';
-      el.querySelector('#g-start').addEventListener('click', () => { g.onStart(); window.scrollTo(0, 0); });
+      el.querySelector('#g-start').addEventListener('click', () => App.ui.step(() => { g.onStart(); window.scrollTo(0, 0); }));
     },
 
     /** Spielstand speichern und Abzeichen prüfen */
@@ -35,7 +35,7 @@
         '<div class="result-ico">' + icon('trophy') + '</div>' +
         '<h2>' + esc(r.title) + '</h2>' +
         (r.sub ? '<p class="muted">' + esc(r.sub) + '</p>' : '') +
-        '<div class="score">' + r.score + '<small>Punkte</small></div>' +
+        '<div class="score"><span data-count="' + r.score + '">' + r.score + '</span><small>Punkte</small></div>' +
         (r.isBest ? '<span class="pill best">' + icon('star') + 'Neuer Rekord!</span>' : '') +
       '</div>' +
       (r.learn ? '<div class="card"><h3 class="h3">' + esc(r.learnTitle) + '</h3><ul class="learn-list">' + r.learn + '</ul></div>' : '');
@@ -61,7 +61,7 @@
   function game(view, id) {
     const g = App.games[id];
     if (!g) { location.hash = '#/spiele'; return; }
-    view.innerHTML = pageHead(g.title, g.topic, '#/spiele') + '<div id="game-root" class="game-root"></div>';
+    view.innerHTML = pageHead(g.title, g.topic, '#/spiele') + '<div id="game-root" class="game-root vt-swap"></div>';
     return g.render(view.querySelector('#game-root'));
   }
 

@@ -62,7 +62,7 @@
   function render(view, params) {
     const sub = params[0] || '';
     view.innerHTML = App.ui.pageHead('Wissen', 'IT, Synchro und Schnitt erklärt') + tabs(sub) +
-      '<div class="wissen-body">' + (sub === 'lexikon' ? lexHtml() : sub === 'fragen' ? questionsHtml() : areasHtml()) + '</div>';
+      '<div class="wissen-body vt-swap">' + (sub === 'lexikon' ? lexHtml() : sub === 'fragen' ? questionsHtml() : areasHtml()) + '</div>';
 
     if (sub === 'lexikon') {
       const inp = view.querySelector('#lex-q');

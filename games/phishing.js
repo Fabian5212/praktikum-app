@@ -69,7 +69,7 @@
         '<div class="pop">' + messageHtml(msg, false) + '</div>' +
         '<div class="decide"><button class="btn safe" data-v="0">' + icon('check') + 'Sicher</button>' +
         '<button class="btn danger" data-v="1">' + icon('alert') + 'Phishing</button></div>';
-      el.querySelectorAll('.decide .btn').forEach(b => b.addEventListener('click', () => decide(b.dataset.v === '1')));
+      el.querySelectorAll('.decide .btn').forEach(b => b.addEventListener('click', () => App.ui.transition(() => decide(b.dataset.v === '1'), 'fade')));
     }
 
     function decide(saysPhish) {
@@ -88,7 +88,7 @@
         '<ol class="flags">' + notes.map(n => '<li class="' + (n.good ? 'good' : 'bad') + '"><b>' + esc(n.text) + '</b><br>' + esc(n.why) + '</li>').join('') + '</ol>' +
         '<p class="tipbox">' + icon('bulb') + esc(msg.tip) + '</p>' +
         '<button class="btn primary block" id="p-next">' + (i + 1 < ROUND ? 'Nächste Nachricht' : 'Auswertung') + icon('next') + '</button>';
-      el.querySelector('#p-next').addEventListener('click', () => { i++; i < ROUND ? show() : finish(); });
+      el.querySelector('#p-next').addEventListener('click', () => App.ui.step(() => { i++; i < ROUND ? show() : finish(); window.scrollTo(0, 0); }));
       el.scrollIntoView({ block: 'start' });
     }
 
@@ -116,7 +116,7 @@
         learn: rules.map(r => '<li><span class="li-ico">' + icon(r[0]) + '</span><div>' + esc(r[1]) + '</div></li>').join('')
       }) + '<div class="stack"><button class="btn primary" id="p-again">' + icon('play') + 'Neue Runde</button>' +
         '<a class="btn ghost" href="#/spiele">' + icon('back') + 'Zu den Spielen</a></div>';
-      el.querySelector('#p-again').addEventListener('click', () => play(el));
+      el.querySelector('#p-again').addEventListener('click', () => App.ui.step(() => play(el)));
     }
 
     show();

@@ -83,7 +83,7 @@
           '<p>' + esc(tk.why) + '</p>' +
           '<button class="btn primary" id="t-next">' + (i + 1 < ROUND ? 'Nächstes Ticket' : 'Auswertung') + icon('next') + '</button></div>';
       const nx = el.querySelector('#t-next');
-      nx.addEventListener('click', () => { i++; i < ROUND ? show() : finish(); });
+      nx.addEventListener('click', () => App.ui.step(() => { i++; i < ROUND ? show() : finish(); }));
       nx.focus();
       nx.scrollIntoView({ block: 'nearest', behavior: App.ui.reducedMotion() ? 'auto' : 'smooth' });
     }
@@ -105,7 +105,7 @@
         learn: missed.map(t => '<li><span class="li-ico">' + icon('ticket') + '</span><div><b>' + esc(t.t) + '</b><br>' + esc(t.ok) + '. <span class="muted">' + esc(t.why) + '</span></div></li>').join('')
       }) + '<div class="stack"><button class="btn primary" id="t-again">' + icon('play') + 'Neue Runde</button>' +
         '<a class="btn ghost" href="#/spiele">' + icon('back') + 'Zu den Spielen</a></div>';
-      el.querySelector('#t-again').addEventListener('click', () => play(el));
+      el.querySelector('#t-again').addEventListener('click', () => App.ui.step(() => play(el)));
     }
 
     show();

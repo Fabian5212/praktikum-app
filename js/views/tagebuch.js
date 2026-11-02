@@ -46,7 +46,7 @@
       }).join('') + '</div>' +
 
       // Eintrag des Tages
-      '<section class="card entry">' +
+      '<section class="card entry vt-swap">' +
         '<div class="card-head"><h2 class="h3">' + WEEKDAYS[day] + '</h2><span class="saved muted small" id="tb-saved" aria-live="polite"></span></div>' +
         '<label class="field"><span>Datum</span><input type="date" data-f="date" value="' + esc(e.date) + '"></label>' +
         '<div class="field"><span>Bereich</span><div class="seg">' + Object.keys(AREAS).map(k =>
@@ -95,7 +95,13 @@
     const flash = () => { savedEl.textContent = 'Gespeichert'; clearTimeout(flash.t); flash.t = setTimeout(() => { savedEl.textContent = ''; }, 1500); };
     const saveText = App.ui.debounce((key, val) => { if (setField(day, key, val)) { flash(); App.badges.check(); } }, 400);
 
-    view.querySelectorAll('.day-tab').forEach(b => b.addEventListener('click', () => { day = +b.dataset.day; App.router.refresh(); }));
+    // Tag wechseln: Eintrag gleitet je nach Richtung von rechts oder links herein
+    view.querySelectorAll('.day-tab').forEach(b => b.addEventListener('click', () => {
+      const next = +b.dataset.day;
+      if (next === day) return;
+      const kind = next > day ? 'step' : 'step-back';
+      App.ui.transition(() => { day = next; App.router.refresh(); }, kind);
+    }));
     view.querySelectorAll('[data-f]').forEach(inp => inp.addEventListener('input', () => saveText(inp.dataset.f, inp.value)));
 
     view.querySelectorAll('[data-area]').forEach(b => b.addEventListener('click', () => {
@@ -109,8 +115,12 @@
       const n = +b.dataset.star;
       setField(day, 'rating', n);
       view.querySelectorAll('[data-star]').forEach(x => {
-        x.classList.toggle('on', +x.dataset.star <= n);
+        const on = +x.dataset.star <= n;
+        x.classList.toggle('on', on);
         x.setAttribute('aria-checked', String(+x.dataset.star === n));
+        // Sterne nacheinander aufploppen lassen
+        x.style.setProperty('--d', (+x.dataset.star - 1) * 50 + 'ms');
+        if (on) App.ui.replay(x, 'bounce');
       });
       flash();
     }));
