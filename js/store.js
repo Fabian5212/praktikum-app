@@ -17,8 +17,12 @@ window.App = window.App || { views: {}, games: {}, data: {} };
     it:      { label: 'IT-Service',      short: 'IT',      icon: 'monitor' },
     synchro: { label: 'Synchronisation', short: 'Synchro', icon: 'mic' },
     schnitt: { label: 'Schnitt',         short: 'Schnitt', icon: 'film' },
+    tonregie:{ label: 'Tonregie',        short: 'Tonregie', icon: 'sliders' },
     anderes: { label: 'Anderes',         short: 'Anderes', icon: 'dots' }
   };
+
+  /** Alle Minispiele in Anzeige-Reihenfolge. Neues Spiel: hier eintragen + games.<id> in defaults() */
+  const GAMES = ['kabel', 'tickets', 'phishing', 'pc', 'tonregie'];
 
   /** Leerer Anfangszustand. Neue Felder hier ergänzen – merge() füllt sie bei alten Daten auf. */
   function defaults() {
@@ -31,7 +35,8 @@ window.App = window.App || { views: {}, games: {}, data: {} };
         kabel:    { plays: 0, best: 0, bestPct: 0, levels: [0, 0, 0, 0, 0] },
         tickets:  { plays: 0, best: 0, bestPct: 0, bestCombo: 0 },
         phishing: { plays: 0, best: 0, bestPct: 0 },
-        pc:       { plays: 0, best: 0, bestPct: 0, perfect: false }
+        pc:       { plays: 0, best: 0, bestPct: 0, perfect: false },
+        tonregie: { plays: 0, best: 0, bestPct: 0 }
       },
       badges: {},                    // id -> Datum der Freischaltung
       diary: {},                     // "0".."4" -> Eintrag (siehe tagebuch.js)
@@ -80,6 +85,7 @@ window.App = window.App || { views: {}, games: {}, data: {} };
 
   App.store = {
     AREAS,
+    GAMES,
     LIMIT_BYTES,
 
     get: () => state,

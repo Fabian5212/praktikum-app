@@ -1,15 +1,16 @@
 # Einblick – deine Praktikumswoche
 
-Eine mobile Web-App (PWA) für Schülerpraktikantinnen und -praktikanten, die eine Woche in **IT-Service**, **Synchronisation** und **Schnitt** verbringen.
+Eine mobile Web-App (PWA) für Schülerpraktikantinnen und -praktikanten, die eine Woche in **IT-Service**, **Synchronisation** und **Schnitt** verbringen – plus einen Besuch in der **Tonregie**.
 
 - **Start:** Begrüßung, heutiger Praktikumstag, Wochenplan, Fortschritt und Abzeichen
-- **Spiele:** vier Minispiele mit Erklärung vorher und Lerneffekt nachher
+- **Spiele:** fünf Minispiele mit Erklärung vorher und Lerneffekt nachher
   - *Kabel-Salat* (Netzwerk): Geräte durch Ziehen oder Antippen verbinden, 5 Level
   - *Ticket-Rush* (IT-Support): 30 Störungstickets, Zeitdruck, Combo-System
   - *Phishing oder echt?* (IT-Sicherheit): 22 erfundene E-Mails und SMS mit markierten Warnsignalen
   - *PC zusammenbauen* (Hardware): Bauteile ins Gehäuse ziehen
+  - *Live-Mix* (Tonregie): am Mischpult eine Live-Sendung mischen, 12 Momente
 - **Tagebuch:** ein Eintrag pro Tag (Mo–Fr), Sterne-Bewertung, optionales Foto, Notizen, Fragenliste
-- **Wissen:** die drei Bereiche erklärt, Wörterbuch mit über 50 Begriffen, gute Fragen zum Stellen
+- **Wissen:** die vier Bereiche erklärt, Wörterbuch mit über 70 Begriffen, gute Fragen zum Stellen
 - **Fazit:** Auswertung als Balkengrafik, persönliches Fazit, Export als Text und JSON, Import, alles löschen
 
 Das Design ist ein dunkles Glas-Design mit leuchtenden Akzentfarben pro Spiel bzw. Bereich (Farben zentral in `css/style.css` unter `:root`).
@@ -32,7 +33,7 @@ js/app.js           Router (#/seite) und Start
 js/views/*.js       die fünf Seiten
 js/data/*.js        Wissenstexte und Wörterbuch
 games/*.js          Minispiele und ihre Inhalte (*-data.js)
-img/games/          Illustrationen der vier Spiele
+img/games/          Illustrationen der Spiele (tonregie.png aus tools/make-tonregie-art.js)
 icons/              Logo (logo.svg) und App-Icons (SVG + PNG)
 tools/make-icons.js erzeugt Logo und Icons neu: node tools/make-icons.js
 ```
@@ -44,6 +45,8 @@ tools/make-icons.js erzeugt Logo und Icons neu: node tools/make-icons.js
 - Wörterbuch: `js/data/glossary.js`
 - Bereiche, Berufe und gute Fragen: `js/data/knowledge.js`
 - Abzeichen: `js/badges.js`
+- Sendeablauf für Live-Mix: `games/tonregie.js` (Liste `SHOW`)
+- Neues Spiel: in `App.store.GAMES` (`js/store.js`) eintragen, Skript in `index.html` und `sw.js` ergänzen
 
 > **Wichtig:** Nach jeder Änderung in `sw.js` die Konstante `VERSION` erhöhen (z. B. `einblick-v1.0.1`). Sonst zeigen bereits installierte Apps weiter die alten Dateien. Neue Dateien müssen außerdem in die Liste `FILES` in `sw.js`.
 

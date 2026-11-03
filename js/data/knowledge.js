@@ -57,6 +57,23 @@
         { name: 'Studium Film / Montage', info: 'an Film- und Medienhochschulen' },
         { name: 'Schnitt-Assistenz', info: 'häufiger Einstieg nach der Ausbildung' }
       ]
+    },
+    tonregie: {
+      title: 'Tonregie',
+      intro: 'Die Tonregie ist der Raum, in dem bei Fernsehen und Radio der Ton einer Sendung gesteuert wird – oft live. Am großen Mischpult entscheidet die Tonregie, wann welches Mikrofon, welche Musik und welcher Einspieler zu hören ist. Beim WDR erlebst du, wie das bei einem großen Sender abläuft.',
+      tasks: [
+        'Mikrofone von Moderation und Gästen zur richtigen Zeit auf- und zuziehen',
+        'Musik, Jingles und vorproduzierte Beiträge einspielen',
+        'Pegel überwachen: nicht zu laut, nicht zu leise – für alle Zuschauer gleich angenehm',
+        'Mit Regie und Studio über Kopfhörer und Gegensprechanlage reden',
+        'Bei Störungen blitzschnell reagieren: Rückkopplung, ausgefallenes Funkmikro, Anrufer zu leise'
+      ],
+      jobs: [
+        { name: 'Mediengestalter/in Bild und Ton', info: 'Ausbildung, 3 Jahre – Ton und Bild bei Sendern und Produktionen' },
+        { name: 'Tonmeister/in / Toningenieur/in', info: 'meist Studium – Verantwortung für den Ton großer Sendungen' },
+        { name: 'Fachkraft für Veranstaltungstechnik', info: 'Ausbildung, 3 Jahre – Ton, Licht und Bühne bei Live-Events' },
+        { name: 'Audio-Engineer', info: 'Studium oder Weiterbildung – Aufnahme, Mischung, Live-Ton' }
+      ]
     }
   };
 
@@ -85,6 +102,14 @@
       'Wie arbeitet ihr mit der Regie zusammen?',
       'Was passiert beim Rendern und warum dauert es so lange?',
       'Welche Projekte haben dir am meisten Spaß gemacht?'
+    ],
+    tonregie: [
+      'Was ist der Unterschied zwischen Tonregie und Bildregie?',
+      'Was passiert, wenn während einer Live-Sendung ein Mikrofon ausfällt?',
+      'Wie viele Kanäle hat dieses Mischpult – und braucht ihr alle?',
+      'Wie redet ihr während der Sendung mit dem Studio, ohne dass es jemand hört?',
+      'Woher wisst ihr, wann welcher Beitrag oder welche Musik kommt?',
+      'Bildet der Sender selbst aus – und wie komme ich an ein Praktikum?'
     ]
   };
 })(window.App);

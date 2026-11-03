@@ -12,6 +12,7 @@
     it: 'Heute schaust du dem IT-Service über die Schulter: Tickets, PCs, Netzwerk.',
     synchro: 'Heute geht\'s ins Tonstudio: Hier bekommen Filme ihre deutschen Stimmen.',
     schnitt: 'Heute im Schnitt: Aus vielen Aufnahmen wird ein fertiger Film.',
+    tonregie: 'Heute in der Tonregie beim WDR: Hier wird der Ton einer Sendung gesteuert – oft live.',
     anderes: 'Heute steht etwas Besonderes an – schreib es nachher ins Tagebuch.'
   };
 
@@ -55,7 +56,7 @@
 
   function render(view) {
     const s = App.store.get();
-    const games = ['kabel', 'tickets', 'phishing', 'pc'];
+    const games = App.store.GAMES;
     const plays = games.reduce((n, k) => n + s.games[k].plays, 0);
     const got = App.badges.LIST.filter(b => s.badges[b.id]).length;
 

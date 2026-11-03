@@ -1,6 +1,6 @@
 /*
  * glossary.js – Wörterbuch mit Fachbegriffen.
- * Format: [Begriff, Bereich ('it' | 'synchro' | 'schnitt'), Erklärung in einfacher Sprache]
+ * Format: [Begriff, Bereich ('it' | 'synchro' | 'schnitt' | 'tonregie'), Erklärung in einfacher Sprache]
  */
 (function (App) {
   'use strict';
@@ -63,6 +63,26 @@
     ['Einstellung', 'schnitt', 'Ein ununterbrochen gefilmter Abschnitt aus einer Kameraperspektive.'],
     ['Abnahme', 'schnitt', 'Der Moment, in dem der Kunde oder die Regie den Film anschaut und freigibt.'],
     ['Auflösung', 'schnitt', 'Wie viele Bildpunkte ein Video hat, z. B. Full HD (1920 × 1080) oder 4K.'],
-    ['Seitenverhältnis', 'schnitt', 'Das Verhältnis von Breite zu Höhe, z. B. 16:9 für TV oder 9:16 für Handy-Videos.']
+    ['Seitenverhältnis', 'schnitt', 'Das Verhältnis von Breite zu Höhe, z. B. 16:9 für TV oder 9:16 für Handy-Videos.'],
+
+    /* ---------- Tonregie ---------- */
+    ['Mischpult', 'tonregie', 'Das große Steuergerät in der Tonregie. Jede Tonquelle (Mikro, Musik, Einspieler) hat einen eigenen Kanal mit Reglern.'],
+    ['Fader', 'tonregie', 'Ein Schieberegler am Mischpult. Hochschieben = lauter bzw. „auf“, runterziehen = leiser bzw. „zu“.'],
+    ['Kanalzug', 'tonregie', 'Eine senkrechte Reihe am Mischpult für genau eine Tonquelle – mit Fader, Klangreglern und Knöpfen.'],
+    ['Aussteuern', 'tonregie', 'Die Lautstärke so einstellen, dass der Ton kräftig ist, aber nie übersteuert (verzerrt).'],
+    ['Live-Sendung', 'tonregie', 'Eine Sendung, die in dem Moment ausgestrahlt wird, in dem sie passiert. Fehler kann man nicht mehr rausschneiden!'],
+    ['Sendeablauf', 'tonregie', 'Der genaue Plan einer Sendung: was wann kommt – Moderation, Beitrag, Musik, Gast – oft auf die Sekunde.'],
+    ['Einspieler', 'tonregie', 'Ein vorbereiteter Beitrag oder Jingle, der während der Sendung abgespielt wird.'],
+    ['Jingle', 'tonregie', 'Eine kurze Erkennungsmelodie, z. B. am Anfang einer Sendung oder vor den Nachrichten.'],
+    ['Equalizer (EQ)', 'tonregie', 'Ein Klangregler: Damit macht man Bässe, Mitten oder Höhen lauter oder leiser – z. B. damit eine Stimme klarer klingt.'],
+    ['Kompressor', 'tonregie', 'Gleicht Lautstärkeunterschiede aus: Laute Stellen werden etwas leiser, damit die Stimme gleichmäßiger klingt.'],
+    ['Rückkopplung', 'tonregie', 'Lautes Pfeifen, wenn ein Mikrofon seinen eigenen Ton aus dem Lautsprecher wieder aufnimmt. Sofort Fader runter!'],
+    ['Funkmikrofon', 'tonregie', 'Mikrofon ohne Kabel. Der Ton wird per Funk übertragen – praktisch, aber der Akku muss voll sein.'],
+    ['Ansteckmikrofon', 'tonregie', 'Ein winziges Mikro, das an der Kleidung befestigt wird. Wird oft in Talkshows benutzt.'],
+    ['Phantomspeisung', 'tonregie', 'Strom, den das Mischpult über das Mikrofonkabel schickt. Manche Mikrofone (Kondensatormikros) brauchen ihn.'],
+    ['Gegensprechanlage', 'tonregie', 'Damit reden Regie, Ton und Kamera während der Sendung miteinander – die Zuschauer hören davon nichts.'],
+    ['Lautheit', 'tonregie', 'Wie laut etwas für unser Ohr wirkt. Sender halten feste Werte ein, damit Werbung nicht plötzlich lauter ist als der Film.'],
+    ['Ü-Wagen', 'tonregie', 'Übertragungswagen: eine fahrbare Regie, z. B. für Live-Übertragungen von Fußballspielen oder Konzerten.'],
+    ['N-1 (Mix-Minus)', 'tonregie', 'Ein Mix für einen zugeschalteten Gast, der alles enthält – außer seiner eigenen Stimme. Sonst hört er sich mit Verzögerung als Echo.']
   ];
 })(window.App);

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <radialGradient id="bg" cx="0" cy="96" r="190" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F472B6" stop-opacity=".32"/><stop offset=".55" stop-color="#F472B6" stop-opacity="0"/></radialGradient>
+    <linearGradient id="topG" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#3B4058"/><stop offset=".55" stop-color="#555B78"/><stop offset="1" stop-color="#2F3349"/></linearGradient>
+    <linearGradient id="frontG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A2E42"/><stop offset="1" stop-color="#14161F"/></linearGradient>
+    <linearGradient id="knob" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9CEDD"/><stop offset="1" stop-color="#6E768C"/></linearGradient>
+    <linearGradient id="knobLit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE0F0"/><stop offset="1" stop-color="#F472B6"/></linearGradient>
+    <linearGradient id="ring" x1="0" x2="1"><stop offset="0" stop-color="#F472B6" stop-opacity="0"/><stop offset=".3" stop-color="#F472B6"/><stop offset=".75" stop-color="#FFC4E1"/><stop offset="1" stop-color="#F472B6" stop-opacity="0"/></linearGradient>
+    <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+  <rect width="192" height="192" fill="#12141F"/>
+  <rect width="192" height="192" fill="url(#bg)"/>
+  <!-- Leuchtring unter dem Pult -->
+  <ellipse cx="100" cy="150" rx="84" ry="19" fill="none" stroke="#F472B6" stroke-opacity=".35" stroke-width="6" filter="url(#soft)"/>
+  <ellipse cx="100" cy="150" rx="82" ry="18" fill="none" stroke="url(#ring)" stroke-width="1.6" filter="url(#glow)"/>
+  <ellipse cx="100" cy="158" rx="66" ry="10" fill="#000" opacity=".45" filter="url(#soft)"/>
+  <!-- Pult -->
+  <polygon points="40.0,140.0 24.0,84.0 24.0,104.0 40.0,160.0" fill="#1B1E2C"/>
+  <polygon points="40.0,140.0 168.0,108.0 168.0,128.0 40.0,160.0" fill="url(#frontG)"/>
+  <polygon points="40.0,140.0 168.0,108.0 152.0,52.0 24.0,84.0" fill="url(#topG)" stroke="#6E7594" stroke-width=".8"/>
+  <line x1="40" y1="140" x2="168" y2="108" stroke="#9BA2C0" stroke-width="1" opacity=".7"/>
+  <circle cx="57.3" cy="134.3" r="3.2" fill="#8A91AB"/><circle cx="79.0" cy="128.8" r="3.2" fill="#8A91AB"/><circle cx="100.8" cy="123.4" r="3.2" fill="#8A91AB"/><circle cx="122.6" cy="118.0" r="3.2" fill="#8A91AB"/><circle cx="144.3" cy="112.5" r="3.2" fill="#8A91AB"/>
+  <line x1="56" y1="128.8" x2="48" y2="100.80000000000001" stroke="#0B0D15" stroke-width="4.6" stroke-linecap="round"/><rect x="45.4" y="118.7" width="18" height="9" rx="2.2" transform="rotate(-14 54.4 123.2)" fill="url(#knob)"/><circle cx="46.4" cy="95.2" r="2.3" fill="#2DD4AE" filter="url(#glow)"/><circle cx="45.3" cy="91.3" r="2.3" fill="#2A2E40"/><circle cx="44.2" cy="87.4" r="2.3" fill="#2A2E40"/><circle cx="43.0" cy="83.4" r="2.3" fill="#2A2E40"/><line x1="77.76" y1="123.36000000000001" x2="69.76" y2="95.36000000000001" stroke="#0B0D15" stroke-width="4.6" stroke-linecap="round"/><rect x="62.5" y="97.0" width="18" height="9" rx="2.2" transform="rotate(-14 71.5 101.5)" fill="url(#knobLit)" filter="url(#glow)"/><circle cx="68.2" cy="89.8" r="2.3" fill="#2DD4AE" filter="url(#glow)"/><circle cx="67.0" cy="85.8" r="2.3" fill="#2DD4AE" filter="url(#glow)"/><circle cx="65.9" cy="81.9" r="2.3" fill="#F5B83D" filter="url(#glow)"/><circle cx="64.8" cy="78.0" r="2.3" fill="#FF5D6C" filter="url(#glow)"/><line x1="99.52" y1="117.92" x2="91.52" y2="89.92" stroke="#0B0D15" stroke-width="4.6" stroke-linecap="round"/><rect x="87.7" y="103.6" width="18" height="9" rx="2.2" transform="rotate(-14 96.7 108.1)" fill="url(#knob)"/><circle cx="89.9" cy="84.3" r="2.3" fill="#2DD4AE" filter="url(#glow)"/><circle cx="88.8" cy="80.4" r="2.3" fill="#2A2E40"/><circle cx="87.7" cy="76.5" r="2.3" fill="#2A2E40"/><circle cx="86.6" cy="72.6" r="2.3" fill="#2A2E40"/><line x1="121.28" y1="112.48" x2="113.28" y2="84.48" stroke="#0B0D15" stroke-width="4.6" stroke-linecap="round"/><rect x="105.1" y="82.8" width="18" height="9" rx="2.2" transform="rotate(-14 114.1 87.3)" fill="url(#knobLit)" filter="url(#glow)"/><circle cx="111.7" cy="78.9" r="2.3" fill="#2DD4AE" filter="url(#glow)"/><circle cx="110.6" cy="75.0" r="2.3" fill="#2DD4AE" filter="url(#glow)"/><circle cx="109.4" cy="71.0" r="2.3" fill="#F5B83D" filter="url(#glow)"/><circle cx="108.3" cy="67.1" r="2.3" fill="#FF5D6C" filter="url(#glow)"/><line x1="143.04" y1="107.04" x2="135.04" y2="79.04" stroke="#0B0D15" stroke-width="4.6" stroke-linecap="round"/><rect x="132.8" y="98.3" width="18" height="9" rx="2.2" transform="rotate(-14 141.8 102.8)" fill="url(#knob)"/><circle cx="133.4" cy="73.4" r="2.3" fill="#2DD4AE" filter="url(#glow)"/><circle cx="132.3" cy="69.5" r="2.3" fill="#2A2E40"/><circle cx="131.2" cy="65.6" r="2.3" fill="#2A2E40"/><circle cx="130.1" cy="61.7" r="2.3" fill="#2A2E40"/>
+  <!-- ON-AIR-Lämpchen -->
+  <circle cx="146.4" cy="50.4" r="4" fill="#FF3B55" filter="url(#glow)"/>
+</svg>

@@ -26,6 +26,7 @@
   --blue: #4F8BFF;
   --amber: #F5A524;
   --violet: #9B7BFF;
+  --rose: #F472B6;
   --brand: #8B78FF;
   --brand-grad: linear-gradient(135deg, #8B78FF 0%, #5B8CFF 100%);
   --spark: #F5B83D;
@@ -36,6 +37,7 @@
   --it: var(--blue);
   --synchro: var(--violet);
   --schnitt: var(--amber);
+  --tonregie: var(--rose);
   --anderes: #8A93AB;
 
   --radius: 26px;
@@ -52,11 +54,13 @@
 .area-it { --a: var(--it); }
 .area-synchro { --a: var(--synchro); }
 .area-schnitt { --a: var(--schnitt); }
+.area-tonregie { --a: var(--tonregie); }
 .area-anderes { --a: var(--anderes); }
 .g-kabel { --a: var(--teal); }
 .g-tickets { --a: var(--blue); }
 .g-phishing { --a: var(--amber); }
 .g-pc { --a: var(--violet); }
+.g-tonregie { --a: var(--rose); }
 
 /* Leuchtender linker Rand in der Akzentfarbe --a (für Karten aller Art).
    .card.… erhöht die Spezifität, damit die normale .card-Regel weiter unten das nicht überschreibt. */
@@ -316,7 +320,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 
 /* ========== 5. Startseite ========== */
 /* Ohne Bereich für heute: Markenfarbe */
-.hero:not(.area-it):not(.area-synchro):not(.area-schnitt):not(.area-anderes) { --a: var(--brand); }
+.hero:not(.area-it):not(.area-synchro):not(.area-schnitt):not(.area-tonregie):not(.area-anderes) { --a: var(--brand); }
 .hero {
   position: relative; overflow: hidden;
   padding: 20px; margin-bottom: 14px;
@@ -345,8 +349,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 }
 .wday b { font-size: 15px; font-weight: 600; }
 .wday span { font-size: 11px; color: var(--muted); max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
-.wday.area-it, .wday.area-synchro, .wday.area-schnitt, .wday.area-anderes { box-shadow: inset 0 -3px 0 var(--a); }
-.wday.area-it span, .wday.area-synchro span, .wday.area-schnitt span, .wday.area-anderes span { color: color-mix(in srgb, var(--a) 80%, #fff); }
+.wday[class*=area-] { box-shadow: inset 0 -3px 0 var(--a); }
+.wday[class*=area-] span { color: color-mix(in srgb, var(--a) 80%, #fff); }
 .wday.now {
   background: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, .06));
   border-color: rgba(255, 255, 255, .3);
@@ -382,6 +386,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
     linear-gradient(#141725, #141725) padding-box,
     linear-gradient(100deg, color-mix(in srgb, var(--a) 70%, transparent), rgba(255, 255, 255, .07) 40%) border-box;
 }
+.stat:last-child:nth-child(odd) { grid-column: span 2; }   /* ungerade Anzahl Spiele: letzte Kachel volle Breite */
 .stat img { grid-row: span 2; width: 48px; height: 48px; -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent); mask-image: radial-gradient(closest-side, #000 70%, transparent); }
 .stat b { font-size: 20px; font-weight: 700; line-height: 1.1; }
 .stat span { font-size: 12.5px; color: var(--muted); line-height: 1.2; }
@@ -573,6 +578,57 @@ ol.flags li { padding: 11px 13px; border-radius: 14px; font-size: 15px; line-hei
 ol.flags li b { color: var(--ink); }
 ol.flags li.bad { background: rgba(255, 93, 108, .08); border: 1px solid rgba(255, 93, 108, .25); }
 ol.flags li.good { background: rgba(45, 212, 174, .08); border: 1px solid rgba(45, 212, 174, .25); }
+
+/* Live-Mix (Tonregie) */
+.onair {
+  display: inline-flex; align-items: center; padding: 5px 12px; border-radius: 8px;
+  border: 1.5px solid #FF4D5E; color: #FF4D5E; font-weight: 800; font-size: 12px; letter-spacing: .14em;
+}
+.onair.live { background: #FF2E44; border-color: #FF2E44; color: #fff; box-shadow: 0 0 18px rgba(255, 46, 68, .7); animation: onair 1.6s ease-in-out infinite; }
+@keyframes onair { 50% { box-shadow: 0 0 6px rgba(255, 46, 68, .4); } }
+.cue { --a: var(--rose); }
+.cue .eyebrow { color: color-mix(in srgb, var(--rose) 80%, #fff); }
+.cue-text { font-size: 19px; line-height: 1.4; margin: 6px 0 0; font-weight: 500; }
+.console {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  padding: 10px 8px; margin-bottom: 14px; border-radius: 24px;
+  background: linear-gradient(180deg, #1C1F30, #11131D);
+  border: 1px solid var(--line-strong);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06), var(--shadow);
+}
+.strip {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 10px 0 8px; border-radius: 16px; min-width: 0;
+  background: rgba(255, 255, 255, .03); border: 1px solid var(--line); color: var(--muted);
+  transition: background .25s, border-color .25s, color .25s, box-shadow .25s;
+}
+.strip-name { font-size: 11px; font-weight: 700; letter-spacing: .06em; }
+.strip .ico { width: 20px; height: 20px; }
+.strip-body { display: flex; align-items: flex-end; gap: 7px; height: 128px; }
+.meter { position: relative; width: 6px; height: 100%; border-radius: 3px; background: #0A0C14; overflow: hidden; }
+.meter i {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 0;
+  background: linear-gradient(0deg, #2DD4AE 0 55%, #F5B83D 55% 80%, #FF5D6C 80%);
+  background-size: 100% 128px; background-position: bottom;
+  transition: height .2s;
+}
+.fader { position: relative; width: 8px; height: 100%; border-radius: 4px; background: #07080E; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .08); }
+.fader::after {   /* Fader-Knopf */
+  content: ''; position: absolute; left: 50%; bottom: 0; width: 30px; height: 18px; border-radius: 6px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #6A7090, #2E3346);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .25), inset 0 -2px 0 rgba(0, 0, 0, .3);
+  transition: bottom .35s cubic-bezier(.3, 1.3, .5, 1), background .25s, box-shadow .25s;
+}
+.strip.on { color: #fff; background: rgba(244, 114, 182, .1); border-color: rgba(244, 114, 182, .5); box-shadow: 0 0 22px -8px var(--rose); }
+.strip.on .fader::after { bottom: calc(100% - 18px); background: linear-gradient(180deg, #FFE0F0, var(--rose)); box-shadow: 0 0 14px var(--rose), inset 0 1px 0 rgba(255, 255, 255, .6); }
+.strip.on .meter i { height: 70%; animation: vu .45s ease-in-out infinite alternate; }
+.strip.on:nth-child(2n) .meter i { animation-duration: .37s; }
+.strip.on:nth-child(3n) .meter i { animation-duration: .53s; }
+@keyframes vu { 0% { height: 42%; } 40% { height: 78%; } 70% { height: 58%; } 100% { height: 88%; } }
+.strip-flag { min-height: 16px; font-size: 12px; font-weight: 800; color: var(--bad); text-transform: uppercase; }
+.strip.miss { border-color: var(--bad); box-shadow: 0 0 0 2px rgba(255, 93, 108, .4); }
+.strip.good { border-color: rgba(45, 212, 174, .6); }
 
 /* PC zusammenbauen */
 .pc-case {

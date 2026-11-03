@@ -5,7 +5,7 @@
   'use strict';
   const { icon, esc, WEEKDAYS } = App.ui;
   const AREAS = App.store.AREAS;
-  const GAMES = ['kabel', 'tickets', 'phishing', 'pc'];
+  const GAMES = App.store.GAMES;
 
   /** Durchschnittliche Tagesbewertung pro Bereich */
   function areaStats(s) {

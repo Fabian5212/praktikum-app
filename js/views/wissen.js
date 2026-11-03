@@ -6,7 +6,7 @@
   'use strict';
   const { icon, esc, areaPill } = App.ui;
   const AREAS = App.store.AREAS;
-  const KEYS = ['it', 'synchro', 'schnitt'];
+  const KEYS = ['it', 'synchro', 'schnitt', 'tonregie'];
   let filter = '';   // gewählter Bereich im Wörterbuch ('' = alle)
 
   function tabs(cur) {
@@ -61,7 +61,7 @@
 
   function render(view, params) {
     const sub = params[0] || '';
-    view.innerHTML = App.ui.pageHead('Wissen', 'IT, Synchro und Schnitt erklärt') + tabs(sub) +
+    view.innerHTML = App.ui.pageHead('Wissen', 'IT, Synchro, Schnitt & Tonregie erklärt') + tabs(sub) +
       '<div class="wissen-body vt-swap">' + (sub === 'lexikon' ? lexHtml() : sub === 'fragen' ? questionsHtml() : areasHtml()) + '</div>';
 
     if (sub === 'lexikon') {

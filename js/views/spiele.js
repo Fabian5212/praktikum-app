@@ -6,7 +6,7 @@
   'use strict';
   const { icon, esc, pageHead } = App.ui;
 
-  const ORDER = ['kabel', 'tickets', 'phishing', 'pc'];
+  const ORDER = App.store.GAMES;
 
   /* ---------- Gemeinsame Bausteine für die Spiele ---------- */
   App.gameKit = {

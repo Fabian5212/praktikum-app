@@ -35,6 +35,8 @@
     monitor: '<rect x="2.5" y="3.5" width="19" height="13" rx="2"/><path d="M8.5 21h7M12 16.5V21"/>',
     mic: '<rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5v4M8.5 21.5h7"/>',
     film: '<rect x="3" y="3.5" width="18" height="17" rx="2.5"/><path d="M7.5 3.5v17M16.5 3.5v17M3 8h4.5M3 12h4.5M3 16h4.5M16.5 8H21M16.5 12H21M16.5 16H21"/>',
+    music: '<path d="M9 18V5.5l11-2V16"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+    sliders: '<path d="M6 3.5v8M6 16v4.5M12 3.5v2M12 10v10.5M18 3.5v10M18 18v2.5"/><rect x="3.5" y="11.5" width="5" height="4.5" rx="1.2"/><rect x="9.5" y="5.5" width="5" height="4.5" rx="1.2"/><rect x="15.5" y="13.5" width="5" height="4.5" rx="1.2"/>',
     dots: '<circle cx="5.5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18.5" cy="12" r="1.3"/>',
     clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
     flame: '<path d="M12 21.5c4 0 6.5-2.6 6.5-6.3 0-4-3.3-6.2-4.4-10.7-2.3 1.6-3.4 3.8-3.2 6.3-1.2-.6-2-1.8-2.2-3.3-1.8 1.8-3.2 4.3-3.2 7.4 0 3.9 2.6 6.6 6.5 6.6z"/>',
