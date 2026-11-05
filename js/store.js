@@ -40,9 +40,10 @@ window.App = window.App || { views: {}, games: {}, data: {} };
       },
       badges: {},                    // id -> Datum der Freischaltung
       diary: {},                     // "0".."4" -> Eintrag (siehe tagebuch.js)
-      notes: '',
+      notes: '',                     // alt: Notizen für die ganze Woche, jetzt pro Tag in diary[i].notes (siehe migrate)
       questions: [],                 // { id, text, done }
-      conclusion: ''
+      conclusion: '',                // alt: ein Fazit für die ganze Woche, jetzt pro Tag in conclusions (siehe migrate)
+      conclusions: ['', '', '', '', '']   // persönliches Fazit pro Tag Mo–Fr
     };
   }
 
@@ -65,10 +66,38 @@ window.App = window.App || { views: {}, games: {}, data: {} };
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
-      return merge(defaults(), raw ? JSON.parse(raw) : {});
+      return migrate(merge(defaults(), raw ? JSON.parse(raw) : {}));
     } catch (e) {
       return defaults();
     }
+  }
+
+  /**
+   * Früher gab es nur ein Notizfeld und ein Fazit für die ganze Woche (s.notes, s.conclusion).
+   * Jetzt hat jeder Tag eigene Notizen (diary[i].notes) und ein eigenes Fazit (conclusions[i]).
+   * Alte Texte gehen nicht verloren: Sie bleiben bei allen Tagen bis einschließlich heute stehen
+   * (ohne Startdatum oder vor der Woche nur am Montag). Spätere Tage starten leer.
+   */
+  function migrate(st) {
+    const join = (a, b) => a && a.trim() ? a + '\n\n' + b : b;
+    let last = 0;
+    if (st.startDate) {
+      const now = new Date(); now.setHours(0, 0, 0, 0);
+      const diff = Math.round((now - new Date(st.startDate + 'T00:00:00')) / 86400000);
+      if (diff >= 0) last = Math.min(diff, 4);
+    }
+    while (st.conclusions.length < 5) st.conclusions.push('');
+    for (let i = 0; i <= last; i++) {
+      if (st.notes.trim()) {
+        const e = st.diary[i] || { date: '', area: st.plan[i] || '', did: '', exciting: '', learned: '', rating: 0, photo: '' };
+        e.notes = join(e.notes, st.notes);
+        st.diary[i] = e;
+      }
+      if (st.conclusion.trim()) st.conclusions[i] = join(st.conclusions[i], st.conclusion);
+    }
+    st.notes = '';
+    st.conclusion = '';
+    return st;
   }
 
   /** Speichert. Gibt false zurück, wenn der Speicher voll ist. */
@@ -119,7 +148,7 @@ window.App = window.App || { views: {}, games: {}, data: {} };
         throw new Error('Das sieht nicht nach einer Einblick-Datei aus.');
       }
       const backup = state;
-      state = merge(defaults(), data);
+      state = migrate(merge(defaults(), data));
       if (!save()) { state = backup; throw new Error('Die Datei ist zu groß für den Speicher.'); }
       listeners.forEach(l => l(state));
     },

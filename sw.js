@@ -5,7 +5,7 @@
  * WICHTIG beim Weiterentwickeln: Nach Änderungen an Dateien VERSION erhöhen,
  * sonst bekommen installierte Apps die neuen Dateien erst verspätet.
  */
-const VERSION = 'einblick-v2.1.0';
+const VERSION = 'einblick-v2.2.1';
 const FONT_CACHE = 'einblick-fonts';
 
 // Alle Dateien der App (relativ zum Ordner des Service Workers)

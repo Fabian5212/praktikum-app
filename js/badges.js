@@ -31,7 +31,7 @@
     { id: 'neugierig',  name: 'Neugierig',        icon: 'help',    desc: '5 Fragen auf deine Liste geschrieben.',
       test: s => s.questions.length >= 5 },
     { id: 'fazit',      name: 'Auf den Punkt',    icon: 'flag',    desc: 'Dein persönliches Fazit geschrieben.',
-      test: s => s.conclusion.trim().length >= 40 }
+      test: s => s.conclusions.join('').trim().length >= 40 }
   ];
 
   /** Ein Tag zählt als dokumentiert, wenn mindestens „Was habe ich gemacht?“ ausgefüllt ist */

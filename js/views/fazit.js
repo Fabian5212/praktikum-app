@@ -3,9 +3,10 @@
  */
 (function (App) {
   'use strict';
-  const { icon, esc, WEEKDAYS } = App.ui;
+  const { icon, esc, WEEKDAYS, WD_SHORT } = App.ui;
   const AREAS = App.store.AREAS;
   const GAMES = App.store.GAMES;
+  let day = null;               // Tag (0–4), dessen Fazit gerade angezeigt wird
 
   /** Durchschnittliche Tagesbewertung pro Bereich */
   function areaStats(s) {
@@ -33,6 +34,10 @@
       .sort((a, b) => b.pct - a.pct);
     const favArea = as[0];
     const favGame = gs[0] && gs[0].plays ? gs[0] : null;
+    if (day === null) {
+      const t = App.store.today();
+      day = t.phase === 'during' ? t.index : 0;
+    }
 
     view.innerHTML = App.ui.pageHead('Fazit', 'Deine Woche auf einen Blick') +
 
@@ -51,8 +56,15 @@
         '<p class="muted small">Prozent = dein bestes Ergebnis im jeweiligen Spiel.</p>' +
       '</section>' +
 
+      // Persönliches Fazit: ein eigener Text pro Tag
       '<section class="card"><h2 class="h3">' + icon('flag') + 'Mein persönliches Fazit</h2>' +
-        '<textarea id="fz-text" rows="6" placeholder="Wie war deine Woche? Was nimmst du mit? Könntest du dir einen dieser Berufe vorstellen?">' + esc(s.conclusion) + '</textarea>' +
+        '<div class="day-tabs" role="tablist">' + WD_SHORT.map((d, i) => {
+          const done = s.conclusions[i] && s.conclusions[i].trim();
+          return '<button role="tab" class="day-tab' + (i === day ? ' on' : '') + (done ? ' done' : '') + '" data-fzday="' + i + '" aria-selected="' + (i === day) + '">' +
+            '<b>' + d + '</b>' + (done ? '<i class="dot"></i>' : '') + '</button>';
+        }).join('') + '</div>' +
+        '<label class="field"><span>Fazit für ' + WEEKDAYS[day] + '</span>' +
+        '<textarea id="fz-text" rows="6" placeholder="Wie war dein Tag? Was nimmst du mit? Könntest du dir diesen Beruf vorstellen?">' + esc(s.conclusions[day] || '') + '</textarea></label>' +
         '<p class="muted small" id="fz-saved" aria-live="polite">Wird automatisch gespeichert.</p>' +
       '</section>' +
 
@@ -72,10 +84,20 @@
 
     const ta = view.querySelector('#fz-text');
     ta.addEventListener('input', App.ui.debounce(() => {
-      App.store.update(st => { st.conclusion = ta.value; });
+      App.store.update(st => { st.conclusions[day] = ta.value; });
       view.querySelector('#fz-saved').textContent = 'Gespeichert.';
       App.badges.check();
     }, 500));
+
+    // Tag wechseln: Seite neu zeichnen, Scrollposition behalten
+    view.querySelectorAll('[data-fzday]').forEach(b => b.addEventListener('click', () => {
+      const next = +b.dataset.fzday;
+      if (next === day) return;
+      day = next;
+      const y = window.scrollY;
+      App.router.refresh();
+      window.scrollTo(0, y);
+    }));
 
     view.querySelector('#fz-copy').addEventListener('click', copyText);
     view.querySelector('#fz-json').addEventListener('click', downloadJson);
@@ -93,15 +115,15 @@
     L.push('');
     WEEKDAYS.forEach((d, i) => {
       const e = s.diary[i];
-      if (!e || !(e.did || e.exciting || e.learned || e.rating)) return;
+      if (!e || !(e.did || e.exciting || e.learned || e.rating || e.notes)) return;
       L.push('— ' + d + (e.date ? ', ' + App.ui.formatDate(e.date, true) : '') + (e.area ? ' (' + AREAS[e.area].label + ')' : '') + ' —');
       line('Was ich gemacht habe', e.did);
       line('Spannend fand ich', e.exciting);
       line('Gelernt habe ich', e.learned);
+      line('Notizen', e.notes);
       if (e.rating) L.push('Bewertung: ' + '★'.repeat(e.rating) + '☆'.repeat(5 - e.rating));
       L.push('');
     });
-    if (s.notes.trim()) { L.push('NOTIZEN', s.notes.trim(), ''); }
     if (s.questions.length) {
       L.push('MEINE FRAGEN');
       s.questions.forEach(q => L.push((q.done ? '[x] ' : '[ ] ') + q.text));
@@ -111,7 +133,8 @@
     GAMES.forEach(k => { const g = s.games[k]; L.push(App.games[k].title + ': ' + (g.plays ? 'Rekord ' + g.best + ' Punkte (' + g.bestPct + ' %)' : 'nicht gespielt')); });
     const got = App.badges.LIST.filter(b => s.badges[b.id]).map(b => b.name);
     if (got.length) L.push('', 'ABZEICHEN: ' + got.join(', '));
-    if (s.conclusion.trim()) L.push('', 'MEIN FAZIT', s.conclusion.trim());
+    const fz = WEEKDAYS.map((d, i) => s.conclusions[i] && s.conclusions[i].trim() ? d + ': ' + s.conclusions[i].trim() : '').filter(Boolean);
+    if (fz.length) L.push('', 'MEIN FAZIT', ...fz);
     return L.join('\n');
   }
 

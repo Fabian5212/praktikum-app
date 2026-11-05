@@ -2,7 +2,7 @@
  * tagebuch.js – Tagebuch (#/tagebuch): ein Eintrag pro Tag, Notizen und Fragenliste.
  * Speichert automatisch beim Tippen. Fotos werden verkleinert als Base64 gespeichert.
  *
- * Eintrag: { date, area, did, exciting, learned, rating (0–5), photo (dataURL) }
+ * Eintrag: { date, area, did, exciting, learned, rating (0–5), photo (dataURL), notes }
  */
 (function (App) {
   'use strict';
@@ -14,7 +14,7 @@
   let day = null;               // aktuell gewählter Tag (0–4), bleibt beim Seitenwechsel erhalten
 
   function entry(s, i) {
-    return s.diary[i] || { date: App.store.dayDate(i), area: s.plan[i] || '', did: '', exciting: '', learned: '', rating: 0, photo: '' };
+    return s.diary[i] || { date: App.store.dayDate(i), area: s.plan[i] || '', did: '', exciting: '', learned: '', rating: 0, photo: '', notes: '' };
   }
 
   /** Speichert ein Feld des aktuellen Tages */
@@ -39,7 +39,7 @@
       // Tagesauswahl
       '<div class="day-tabs" role="tablist">' + WD_SHORT.map((d, i) => {
         const de = s.diary[i];
-        const done = de && de.did && de.did.trim();
+        const done = de && ((de.did && de.did.trim()) || (de.notes && de.notes.trim()));
         return '<button role="tab" class="day-tab' + (i === day ? ' on' : '') + (done ? ' done' : '') + '" data-day="' + i + '" aria-selected="' + (i === day) + '">' +
           '<b>' + d + '</b><span>' + (de && de.date ? App.ui.formatDate(de.date) : App.store.dayDate(i) ? App.ui.formatDate(App.store.dayDate(i)) : 'Tag ' + (i + 1)) + '</span>' +
           (done ? '<i class="dot"></i>' : '') + '</button>';
@@ -63,11 +63,10 @@
             : '<label class="btn ghost file-btn">' + icon('camera') + 'Foto hinzufügen<input type="file" accept="image/*" id="tb-photo" hidden></label>') +
           '<p class="muted small">Speicher belegt: ' + Math.round(used / 1024) + ' KB von ca. ' + Math.round(App.store.LIMIT_BYTES / 1024 / 1024) + ' MB. Fotos werden verkleinert.</p>' +
         '</div>' +
+        // Freie Notizen gehören zum gewählten Tag und wechseln mit ihm
+        '<label class="field" id="notizen"><span>Freie Notizen für ' + WEEKDAYS[day] + '</span>' +
+          '<textarea id="tb-notes" rows="5" data-f="notes" placeholder="Alles, was du dir heute merken willst: Namen, Programme, Ideen …">' + esc(e.notes || '') + '</textarea></label>' +
       '</section>' +
-
-      // Notizen
-      '<section class="card" id="notizen"><h2 class="h3">' + icon('edit') + 'Freie Notizen</h2>' +
-        '<textarea id="tb-notes" rows="5" placeholder="Alles, was du dir merken willst: Namen, Programme, Ideen …">' + esc(s.notes) + '</textarea></section>' +
 
       // Fragen
       '<section class="card"><h2 class="h3">' + icon('help') + 'Fragen, die ich noch stellen will</h2>' +
@@ -138,10 +137,6 @@
     });
     const del = view.querySelector('#tb-photo-del');
     del && del.addEventListener('click', () => { setField(day, 'photo', ''); App.router.refresh(); });
-
-    // Notizen
-    const notes = view.querySelector('#tb-notes');
-    notes.addEventListener('input', App.ui.debounce(() => { App.store.update(s => { s.notes = notes.value; }); }, 400));
 
     // Fragen
     view.querySelector('#tb-qform').addEventListener('submit', ev => {
