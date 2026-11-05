@@ -38,9 +38,6 @@
     });
 
     const branches = days.slice();
-    const games = App.store.GAMES.filter(k => s.games[k].plays)
-      .map(k => ({ t: App.games[k].title + ': ' + s.games[k].bestPct + ' %' }));
-    if (games.length) branches.push({ t: 'Minispiele', a: 'spiele', c: games });
     const badges = App.badges.LIST.filter(b => s.badges[b.id]).map(b => ({ t: b.name }));
     if (badges.length) branches.push({ t: 'Abzeichen', a: 'badges', c: badges });
     const qs = s.questions.map(q => ({ t: (q.done ? '✓ ' : '? ') + q.text }));
@@ -214,7 +211,7 @@
 
   // Farben für hellen Hintergrund (etwas kräftiger als in der dunklen App, damit sie gedruckt gut aussehen)
   const COLORS = { it: '#3B76F0', synchro: '#7C5CF0', schnitt: '#D98A0B', tonregie: '#DB4F96', anderes: '#64708A',
-    spiele: '#109C7E', badges: '#C2740A', fragen: '#4B5A75', '': '#7C5CF0' };
+    badges: '#C2740A', fragen: '#4B5A75', '': '#7C5CF0' };
   const FONT = "Outfit, 'Segoe UI', system-ui, sans-serif";
   // Aussehen je Ebene: 0 = Mitte, 1 = Tag, 2 = Überschrift, 3 = Text
   const LEVEL = [

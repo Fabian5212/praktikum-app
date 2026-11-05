@@ -7,8 +7,8 @@
   'use strict';
   const { icon, esc } = App.ui;
 
-  /** Zweig-Farbe: Bereich des Tages bzw. eigene Farbe für Spiele, Abzeichen, Fragen */
-  const CLS = { spiele: 'g-kabel', badges: 'g-phishing', fragen: 'g-tickets' };
+  /** Zweig-Farbe: Bereich des Tages bzw. eigene Farbe für Abzeichen, Fragen */
+  const CLS = { badges: 'g-phishing', fragen: 'g-tickets' };
   const cls = a => a ? (CLS[a] || 'area-' + a) : '';
 
   function node(n, depth) {
