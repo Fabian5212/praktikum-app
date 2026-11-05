@@ -5,7 +5,7 @@
  * WICHTIG beim Weiterentwickeln: Nach Änderungen an Dateien VERSION erhöhen,
  * sonst bekommen installierte Apps die neuen Dateien erst verspätet.
  */
-const VERSION = 'einblick-v2.2.1';
+const VERSION = 'einblick-v2.3.0';
 const FONT_CACHE = 'einblick-fonts';
 
 // Alle Dateien der App (relativ zum Ordner des Service Workers)
@@ -24,6 +24,8 @@ const FILES = [
   'js/views/tagebuch.js',
   'js/views/wissen.js',
   'js/views/fazit.js',
+  'js/mindmap.js',
+  'js/views/mindmap.js',
   'games/kabel.js',
   'games/tickets.js',
   'games/tickets-data.js',

@@ -89,7 +89,7 @@ window.App = window.App || { views: {}, games: {}, data: {} };
     while (st.conclusions.length < 5) st.conclusions.push('');
     for (let i = 0; i <= last; i++) {
       if (st.notes.trim()) {
-        const e = st.diary[i] || { date: '', area: st.plan[i] || '', did: '', exciting: '', learned: '', rating: 0, photo: '' };
+        const e = st.diary[i] || { date: '', area: st.plan[i] || '', did: '', exciting: '', learned: '', rating: 0, photos: [] };
         e.notes = join(e.notes, st.notes);
         st.diary[i] = e;
       }
@@ -97,6 +97,13 @@ window.App = window.App || { views: {}, games: {}, data: {} };
     }
     st.notes = '';
     st.conclusion = '';
+    // Früher ein Foto pro Tag (photo), jetzt beliebig viele (photos)
+    Object.values(st.diary).forEach(e => {
+      if (!e) return;
+      if (!Array.isArray(e.photos)) e.photos = [];
+      if (e.photo) e.photos.unshift(e.photo);
+      delete e.photo;
+    });
     return st;
   }
 

@@ -9,9 +9,10 @@ Eine mobile Web-App (PWA) für Schülerpraktikantinnen und -praktikanten, die ei
   - *Phishing oder echt?* (IT-Sicherheit): 22 erfundene E-Mails und SMS mit markierten Warnsignalen
   - *PC zusammenbauen* (Hardware): Bauteile ins Gehäuse ziehen
   - *Live-Mix* (Tonregie): am Mischpult eine Live-Sendung mischen, 12 Momente
-- **Tagebuch:** ein Eintrag pro Tag (Mo–Fr), Sterne-Bewertung, optionales Foto, Notizen, Fragenliste
+- **Tagebuch:** ein Eintrag pro Tag (Mo–Fr) mit Sterne-Bewertung, beliebig vielen Fotos und eigenen Notizen, dazu eine Fragenliste
+- **Mindmap:** fasst die ganze Woche als Mindmap zusammen (`#/mindmap`), als **XMind-Datei** zum Herunterladen (inkl. Fotos) oder als **Link für den PC**. Der Link trägt die Daten komprimiert hinter dem `#` und wird darum nie an einen Server geschickt.
 - **Wissen:** die vier Bereiche erklärt, Wörterbuch mit über 70 Begriffen, gute Fragen zum Stellen
-- **Fazit:** Auswertung als Balkengrafik, persönliches Fazit, Export als Text und JSON, Import, alles löschen
+- **Fazit:** Auswertung als Balkengrafik, persönliches Fazit pro Tag, Export als Text und JSON, Import, alles löschen
 
 Das Design ist ein dunkles Glas-Design mit leuchtenden Akzentfarben pro Spiel bzw. Bereich (Farben zentral in `css/style.css` unter `:root`).
 
@@ -30,7 +31,8 @@ js/store.js         Datenspeicher (localStorage)
 js/ui.js            Icons, Toasts, Bottom-Sheets, Drag & Drop
 js/badges.js        Abzeichen
 js/app.js           Router (#/seite) und Start
-js/views/*.js       die fünf Seiten
+js/views/*.js       die fünf Seiten und die Mindmap
+js/mindmap.js       Mindmap-Baum, XMind-Export (kleiner ZIP-Packer) und Link-Format
 js/data/*.js        Wissenstexte und Wörterbuch
 games/*.js          Minispiele und ihre Inhalte (*-data.js)
 img/games/          Illustrationen der Spiele (tonregie.png aus tools/make-tonregie-art.js)

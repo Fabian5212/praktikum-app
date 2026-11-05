@@ -2,19 +2,19 @@
  * tagebuch.js – Tagebuch (#/tagebuch): ein Eintrag pro Tag, Notizen und Fragenliste.
  * Speichert automatisch beim Tippen. Fotos werden verkleinert als Base64 gespeichert.
  *
- * Eintrag: { date, area, did, exciting, learned, rating (0–5), photo (dataURL), notes }
+ * Eintrag: { date, area, did, exciting, learned, rating (0–5), photos (Liste von dataURLs), notes }
  */
 (function (App) {
   'use strict';
   const { icon, esc, WEEKDAYS, WD_SHORT } = App.ui;
   const AREAS = App.store.AREAS;
 
-  const PHOTO_MAX = 1000;       // längste Seite in Pixeln
-  const PHOTO_QUALITY = 0.7;    // JPEG-Qualität
+  const PHOTO_MAX = 800;        // längste Seite in Pixeln (klein halten, damit viele Fotos in den Speicher passen)
+  const PHOTO_QUALITY = 0.65;   // JPEG-Qualität
   let day = null;               // aktuell gewählter Tag (0–4), bleibt beim Seitenwechsel erhalten
 
   function entry(s, i) {
-    return s.diary[i] || { date: App.store.dayDate(i), area: s.plan[i] || '', did: '', exciting: '', learned: '', rating: 0, photo: '', notes: '' };
+    return s.diary[i] || { date: App.store.dayDate(i), area: s.plan[i] || '', did: '', exciting: '', learned: '', rating: 0, photos: [], notes: '' };
   }
 
   /** Speichert ein Feld des aktuellen Tages */
@@ -57,10 +57,11 @@
         '<div class="field"><span>Wie war der Tag?</span><div class="stars" role="radiogroup" aria-label="Bewertung">' +
           [1, 2, 3, 4, 5].map(n => '<button type="button" class="star' + (n <= e.rating ? ' on' : '') + '" data-star="' + n + '" role="radio" aria-checked="' + (n === e.rating) + '" aria-label="' + n + ' von 5">' + icon('star') + '</button>').join('') +
         '</div></div>' +
-        '<div class="field"><span>Foto (optional)</span>' +
-          (e.photo
-            ? '<figure class="photo"><img src="' + e.photo + '" alt="Foto vom ' + WEEKDAYS[day] + '"><button class="icon-btn danger" id="tb-photo-del" aria-label="Foto entfernen">' + icon('trash') + '</button></figure>'
-            : '<label class="btn ghost file-btn">' + icon('camera') + 'Foto hinzufügen<input type="file" accept="image/*" id="tb-photo" hidden></label>') +
+        '<div class="field"><span>Fotos (optional)</span>' +
+          (e.photos.length ? '<div class="photo-grid">' + e.photos.map((p, n) =>
+            '<figure class="photo"><button type="button" class="photo-open" data-photo-open="' + n + '" aria-label="Foto ' + (n + 1) + ' groß anzeigen"><img src="' + p + '" alt="Foto ' + (n + 1) + ' vom ' + WEEKDAYS[day] + '"></button>' +
+            '<button type="button" class="icon-btn danger" data-photo-del="' + n + '" aria-label="Foto ' + (n + 1) + ' entfernen">' + icon('trash') + '</button></figure>').join('') + '</div>' : '') +
+          '<label class="btn ghost file-btn">' + icon('camera') + (e.photos.length ? 'Weiteres Foto hinzufügen' : 'Foto hinzufügen') + '<input type="file" accept="image/*" multiple id="tb-photo" hidden></label>' +
           '<p class="muted small">Speicher belegt: ' + Math.round(used / 1024) + ' KB von ca. ' + Math.round(App.store.LIMIT_BYTES / 1024 / 1024) + ' MB. Fotos werden verkleinert.</p>' +
         '</div>' +
         // Freie Notizen gehören zum gewählten Tag und wechseln mit ihm
@@ -75,7 +76,12 @@
           '<li class="' + (q.done ? 'done' : '') + '"><label><input type="checkbox" data-q="' + q.id + '"' + (q.done ? ' checked' : '') + '><span>' + esc(q.text) + '</span></label>' +
           '<button class="icon-btn small" data-qdel="' + q.id + '" aria-label="Frage löschen">' + icon('x') + '</button></li>').join('')
           : '<li class="empty muted">Noch keine Fragen. Ideen findest du unter <a href="#/wissen/fragen">Wissen → Gute Fragen</a>.</li>') +
-        '</ul></section>';
+        '</ul></section>' +
+
+      // Ganze Woche als Mindmap
+      '<section class="card"><h2 class="h3">' + icon('network') + 'Deine Woche als Mindmap</h2>' +
+        '<p class="muted">Alle Tage auf einen Blick – zum Ansehen, als XMind-Datei herunterladen oder per Link an den PC schicken.</p>' +
+        '<a class="btn primary block" href="#/mindmap">' + icon('network') + 'Mindmap öffnen</a></section>';
 
     bind(view);
     if (params[0] === 'notizen') setTimeout(() => {
@@ -124,19 +130,42 @@
       flash();
     }));
 
+    // Fotos: mehrere auf einmal möglich, jedes wird einzeln verkleinert und gespeichert
     const photo = view.querySelector('#tb-photo');
-    photo && photo.addEventListener('change', async () => {
-      const file = photo.files[0];
-      if (!file) return;
-      try {
-        const data = await shrink(file);
-        if (setField(day, 'photo', data)) { App.ui.toast('Foto gespeichert', 'camera'); App.router.refresh(); }
-      } catch (err) {
-        App.ui.toast('Das Foto konnte nicht geladen werden.', 'alert');
+    photo.addEventListener('change', async () => {
+      const files = [...photo.files];
+      photo.value = '';
+      let saved = 0;
+      for (const file of files) {
+        try {
+          const data = await shrink(file);
+          const ok = App.store.update(s => { const e = entry(s, day); e.photos = [...e.photos, data]; s.diary[day] = e; });
+          if (!ok) break;        // Speicher voll – Hinweis kommt vom Store
+          saved++;
+        } catch (err) {
+          App.ui.toast('Ein Foto konnte nicht geladen werden.', 'alert');
+        }
       }
+      if (saved) { App.ui.toast(saved === 1 ? 'Foto gespeichert' : saved + ' Fotos gespeichert', 'camera'); App.router.refresh(); }
     });
-    const del = view.querySelector('#tb-photo-del');
-    del && del.addEventListener('click', () => { setField(day, 'photo', ''); App.router.refresh(); });
+    view.querySelectorAll('[data-photo-del]').forEach(b => b.addEventListener('click', () => {
+      const n = +b.dataset.photoDel;
+      App.ui.sheet({
+        title: 'Foto entfernen?',
+        html: '<p class="muted">Das Foto wird aus dem Tagebuch gelöscht.</p>',
+        actions: [
+          { label: 'Abbrechen', kind: 'ghost' },
+          { label: 'Entfernen', kind: 'danger', icon: 'trash', onClick: () => {
+            App.store.update(s => { const e = entry(s, day); e.photos = e.photos.filter((_, i) => i !== n); s.diary[day] = e; });
+            App.router.refresh();
+          } }
+        ]
+      });
+    }));
+    view.querySelectorAll('[data-photo-open]').forEach(b => b.addEventListener('click', () => {
+      const src = entry(App.store.get(), day).photos[+b.dataset.photoOpen];
+      App.ui.sheet({ title: WEEKDAYS[day], html: '<img class="photo-big" src="' + src + '" alt="Foto vom ' + WEEKDAYS[day] + '">', actions: [{ label: 'Schließen', kind: 'primary' }] });
+    }));
 
     // Fragen
     view.querySelector('#tb-qform').addEventListener('submit', ev => {

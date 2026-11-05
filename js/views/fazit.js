@@ -71,7 +71,8 @@
       '<section class="card"><h2 class="h3">' + icon('download') + 'Sichern & mitnehmen</h2>' +
         '<p class="muted">Deine Daten liegen nur auf diesem Gerät. Sichere sie, bevor du den Browser-Speicher löschst oder ein neues Handy bekommst.</p>' +
         '<div class="stack">' +
-          '<button class="btn primary" id="fz-copy">' + icon('copy') + 'Als Text kopieren</button>' +
+          '<a class="btn primary" href="#/mindmap">' + icon('network') + 'Woche als Mindmap (XMind)</a>' +
+          '<button class="btn ghost" id="fz-copy">' + icon('copy') + 'Als Text kopieren</button>' +
           '<button class="btn ghost" id="fz-json">' + icon('download') + 'Als Datei herunterladen (JSON)</button>' +
           '<label class="btn ghost file-btn">' + icon('upload') + 'Datei importieren<input type="file" accept="application/json,.json" id="fz-import" hidden></label>' +
         '</div></section>' +

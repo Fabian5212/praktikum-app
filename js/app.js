@@ -35,6 +35,7 @@
 
     // aktiven Tab markieren; die Markierung (.tab-pill) gleitet per CSS zur neuen Position
     tabbar.style.setProperty('--tab-index', Math.max(0, TABS.indexOf(page)));
+    tabbar.classList.toggle('no-tab', TABS.indexOf(page) < 0);
     tabbar.querySelectorAll('a').forEach(a => {
       const on = a.dataset.tab === page;
       a.classList.toggle('active', on);
@@ -56,6 +57,9 @@
    */
   function navKind(from, to) {
     if (!from) return 'fade';
+    // Seiten ohne eigenen Tab (Mindmap) liegen „tiefer“
+    if (from.page !== to.page && TABS.indexOf(to.page) < 0) return 'forward';
+    if (from.page !== to.page && TABS.indexOf(from.page) < 0) return 'back';
     if (from.page !== to.page) return TABS.indexOf(to.page) > TABS.indexOf(from.page) ? 'forward' : 'back';
     // Nur bei den Spielen ist eine Unterseite wirklich „tiefer“ (Liste → Spiel)
     if (to.page === 'spiele' && to.params.length !== from.params.length) return to.params.length > from.params.length ? 'forward' : 'back';
@@ -80,7 +84,8 @@
   render(false);
 
   // Erster Start: Namen abfragen
-  if (!App.store.get().name) setTimeout(() => App.settings(true), 250);
+  // (nicht, wenn jemand nur eine geteilte Mindmap ansieht, z. B. am PC)
+  if (!App.store.get().name && !location.hash.startsWith('#/mindmap/')) setTimeout(() => App.settings(true), 250);
 
   // Service Worker für Offline-Nutzung (relativer Pfad → funktioniert auch unter /<repo>/)
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
