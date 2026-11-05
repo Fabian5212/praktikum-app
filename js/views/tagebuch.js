@@ -80,7 +80,7 @@
 
       // Ganze Woche als Mindmap
       '<section class="card"><h2 class="h3">' + icon('network') + 'Deine Woche als Mindmap</h2>' +
-        '<p class="muted">Alle Tage auf einen Blick – zum Ansehen, als XMind-Datei herunterladen oder per Link an den PC schicken.</p>' +
+        '<p class="muted">Alle Tage auf einen Blick – als Bild herunterladen, per Link an den PC schicken oder optional als XMind-Datei.</p>' +
         '<a class="btn primary block" href="#/mindmap">' + icon('network') + 'Mindmap öffnen</a></section>';
 
     bind(view);

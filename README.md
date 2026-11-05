@@ -10,7 +10,7 @@ Eine mobile Web-App (PWA) für Schülerpraktikantinnen und -praktikanten, die ei
   - *PC zusammenbauen* (Hardware): Bauteile ins Gehäuse ziehen
   - *Live-Mix* (Tonregie): am Mischpult eine Live-Sendung mischen, 12 Momente
 - **Tagebuch:** ein Eintrag pro Tag (Mo–Fr) mit Sterne-Bewertung, beliebig vielen Fotos und eigenen Notizen, dazu eine Fragenliste
-- **Mindmap:** fasst die ganze Woche als Mindmap zusammen (`#/mindmap`), als **XMind-Datei** zum Herunterladen (inkl. Fotos) oder als **Link für den PC**. Der Link trägt die Daten komprimiert hinter dem `#` und wird darum nie an einen Server geschickt.
+- **Mindmap:** fasst die ganze Woche als selbst gezeichnete Mindmap zusammen (`#/mindmap`) und speichert sie als **Bild (PNG)**, das jeder PC öffnet und das sich drucken lässt. Optional gibt es eine **XMind-Datei**, und ein **Link für den PC** trägt die Daten komprimiert hinter dem `#`, wird also nie an einen Server geschickt. PNG und XMind enthalten auch die Fotos, der Link nicht.
 - **Wissen:** die vier Bereiche erklärt, Wörterbuch mit über 70 Begriffen, gute Fragen zum Stellen
 - **Fazit:** Auswertung als Balkengrafik, persönliches Fazit pro Tag, Export als Text und JSON, Import, alles löschen
 
@@ -32,7 +32,7 @@ js/ui.js            Icons, Toasts, Bottom-Sheets, Drag & Drop
 js/badges.js        Abzeichen
 js/app.js           Router (#/seite) und Start
 js/views/*.js       die fünf Seiten und die Mindmap
-js/mindmap.js       Mindmap-Baum, XMind-Export (kleiner ZIP-Packer) und Link-Format
+js/mindmap.js       Mindmap-Baum, Zeichnen als Bild (Canvas), XMind-Export (kleiner ZIP-Packer), Link-Format
 js/data/*.js        Wissenstexte und Wörterbuch
 games/*.js          Minispiele und ihre Inhalte (*-data.js)
 img/games/          Illustrationen der Spiele (tonregie.png aus tools/make-tonregie-art.js)

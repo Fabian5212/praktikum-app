@@ -957,13 +957,6 @@ html[data-vt=fade]::view-transition-new(swap) { animation: vt-zoom-in .35s cubic
  * Mindmap (#/mindmap): Wurzel oben, Zweige als Karten, Unterpunkte als Baum mit Linien
  * ========================================================================== */
 .mm { margin-top: 6px; }
-.mm-root {
-  display: grid; gap: 2px; text-align: center; padding: 18px 16px; margin: 0 auto 18px; max-width: 420px;
-  border-radius: 22px; background: var(--brand-grad); color: #fff;
-  box-shadow: 0 14px 34px rgba(123, 108, 255, .4), inset 0 1px 0 rgba(255, 255, 255, .25);
-}
-.mm-root b { font-size: 19px; font-weight: 700; }
-.mm-root span { font-size: 13px; opacity: .85; }
 .mm ul { list-style: none; margin: 0; padding: 0; }
 .mm-branches { display: grid; gap: 14px; position: relative; }
 .mm-branch {
@@ -987,3 +980,11 @@ html[data-vt=fade]::view-transition-new(swap) { animation: vt-zoom-in .35s cubic
 .tabbar.no-tab .tab-pill { opacity: 0; }
 .mm-imgs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .mm-imgs img { width: 72px; height: 72px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line-strong); }
+
+/* Gezeichnete Mindmap: passt in die Breite, Antippen zeigt sie in Originalgröße zum Scrollen */
+.mm-pic-wrap { border-radius: var(--radius-s); overflow: hidden; background: #F3F5FB; margin-bottom: 6px; min-height: 120px; display: grid; place-items: center; cursor: zoom-in; }
+.mm-pic-wrap p { color: #5B6478; }
+.mm-pic-wrap img { width: 100%; height: auto; }
+.mm-pic-wrap.zoom { overflow: auto; max-height: 70vh; place-items: start; cursor: zoom-out; }
+.mm-pic-wrap.zoom img { width: var(--w); max-width: none; }
+.mm-list-title { margin: 22px 4px 12px; }
