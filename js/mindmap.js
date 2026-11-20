@@ -207,9 +207,13 @@
 
   /* ---------- Eigene Mindmap als Bild ---------- */
 
-  // Farben für hellen Hintergrund (etwas kräftiger als in der dunklen App, damit sie gedruckt gut aussehen)
-  const COLORS = { it: '#3B76F0', synchro: '#7C5CF0', schnitt: '#D98A0B', tonregie: '#DB4F96', anderes: '#64708A',
-    fragen: '#4B5A75', '': '#7C5CF0' };
+  // Farben für hellen Hintergrund: Bereichsfarbe etwas abgedunkelt, damit sie gedruckt gut aussieht
+  const FIXED = { fragen: '#4B5A75', '': '#7C5CF0' };
+  function branchColor(a) {
+    if (FIXED[a]) return FIXED[a];
+    const hex = AREAS[a] && /^#[0-9a-f]{6}$/i.test(AREAS[a].color) ? AREAS[a].color : FIXED[''];
+    return '#' + [1, 3, 5].map(i => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.86).toString(16).padStart(2, '0')).join('');
+  }
   const FONT = "Outfit, 'Segoe UI', system-ui, sans-serif";
   // Aussehen je Ebene: 0 = Mitte, 1 = Tag, 2 = Überschrift, 3 = Text
   const LEVEL = [
@@ -273,7 +277,7 @@
       h += 10 + rows * THUMB + (rows - 1) * 6;
     }
     const node = { ls, lh, L, depth, color, subLine, imgs, textH, w: Math.ceil(w) + 2 * L.padX, h: h + 2 * L.padY, kids: [] };
-    for (const k of n.c || []) node.kids.push(await measure(ctx, k, depth + 1, depth === 0 ? (COLORS[k.a] || COLORS['']) : color));
+    for (const k of n.c || []) node.kids.push(await measure(ctx, k, depth + 1, depth === 0 ? branchColor(k.a) : color));
     node.kidsH = node.kids.reduce((s, k) => s + k.sub, 0) + Math.max(0, node.kids.length - 1) * GAP_Y;
     node.sub = Math.max(node.h, node.kidsH);
     return node;
@@ -373,7 +377,7 @@
 
   async function image(tree) {
     try { await Promise.all(['400', '600', '700'].map(w => document.fonts.load(w + ' 20px Outfit'))); } catch (e) { /* offline: Systemschrift */ }
-    const root = await measure(document.createElement('canvas').getContext('2d'), tree, 0, COLORS['']);
+    const root = await measure(document.createElement('canvas').getContext('2d'), tree, 0, FIXED['']);
 
     // Zweige auf rechts und links verteilen, so dass beide Seiten etwa gleich hoch sind.
     // Rechts von oben nach unten, links von unten nach oben → liest sich im Uhrzeigersinn.

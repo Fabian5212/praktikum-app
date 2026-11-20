@@ -12,7 +12,7 @@
   function areaStats(s) {
     const sum = {}, cnt = {};
     Object.values(s.diary).forEach(e => {
-      if (!e || !e.area || !e.rating) return;
+      if (!e || !AREAS[e.area] || !e.rating) return;
       sum[e.area] = (sum[e.area] || 0) + e.rating;
       cnt[e.area] = (cnt[e.area] || 0) + 1;
     });
@@ -117,7 +117,7 @@
     WEEKDAYS.forEach((d, i) => {
       const e = s.diary[i];
       if (!e || !(e.did || e.exciting || e.learned || e.rating || e.notes)) return;
-      L.push('— ' + d + (e.date ? ', ' + App.ui.formatDate(e.date, true) : '') + (e.area ? ' (' + AREAS[e.area].label + ')' : '') + ' —');
+      L.push('— ' + d + (e.date ? ', ' + App.ui.formatDate(e.date, true) : '') + (AREAS[e.area] ? ' (' + AREAS[e.area].label + ')' : '') + ' —');
       line('Was ich gemacht habe', e.did);
       line('Spannend fand ich', e.exciting);
       line('Gelernt habe ich', e.learned);

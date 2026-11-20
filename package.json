@@ -1,0 +1,13 @@
+{
+  "name": "einblick",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Einblick – PWA für die Praktikumswoche. Die App-Version steht in js/config.js.",
+  "scripts": {
+    "start": "npx --yes serve . -l 3000",
+    "check": "node tools/check.js",
+    "bump": "node tools/bump.js",
+    "neu": "node tools/neu.js",
+    "icons": "node tools/make-icons.js"
+  }
+}

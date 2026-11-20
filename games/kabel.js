@@ -221,10 +221,15 @@
     draw();
   }
 
-  App.games.kabel = {
-    id: 'kabel', title: 'Kabel-Salat', icon: 'network', area: 'it', topic: 'Netzwerk',
+  App.addGame({
+    id: 'kabel', title: 'Kabel-Salat', icon: 'network', area: 'it', topic: 'Netzwerk', color: 'var(--teal)',
     teaser: 'Verbinde Router, Switch & Co. zu einem Netzwerk.',
     render,
+    save: { levels: LEVELS.map(() => 0) },
+    badges: [
+      { id: 'netzwerk', name: 'Netzwerk-Profi', icon: 'network', desc: 'Alle ' + LEVELS.length + ' Level in Kabel-Salat geschafft.',
+        test: s => s.games.kabel.levels.every(x => x > 0) }
+    ],
     LEVELS, check   // für Tests und eigene Level
-  };
+  });
 })(window.App);

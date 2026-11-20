@@ -173,9 +173,16 @@
     update();
   }
 
-  App.games.pc = {
-    id: 'pc', title: 'PC zusammenbauen', icon: 'cpu', area: 'it', topic: 'Hardware',
+  App.addGame({
+    id: 'pc', title: 'PC zusammenbauen', icon: 'cpu', area: 'it', topic: 'Hardware', color: 'var(--violet)',
     teaser: 'Bau Bauteil für Bauteil einen Computer.',
-    render
-  };
+    render,
+    save: { perfect: false },
+    badges: [
+      { id: 'schrauber', name: 'Schrauber', icon: 'cpu', desc: 'Deinen ersten PC zusammengebaut.',
+        test: s => s.games.pc.plays > 0 },
+      { id: 'perfekt', name: 'Ohne Fehler', icon: 'star', desc: 'Einen PC ganz ohne Fehler gebaut.',
+        test: s => s.games.pc.perfect }
+    ]
+  });
 })(window.App);

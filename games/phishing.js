@@ -122,9 +122,13 @@
     show();
   }
 
-  App.games.phishing = {
-    id: 'phishing', title: 'Phishing oder echt?', icon: 'shield', area: 'it', topic: 'IT-Sicherheit',
+  App.addGame({
+    id: 'phishing', title: 'Phishing oder echt?', icon: 'shield', area: 'it', topic: 'IT-Sicherheit', color: 'var(--amber)',
     teaser: 'Erkenne gefälschte E-Mails und SMS.',
-    render
-  };
+    render,
+    badges: [
+      { id: 'phishing', name: 'Phishing-Jäger', icon: 'shield', desc: 'Mindestens 9 von 10 Nachrichten richtig erkannt.',
+        test: s => s.games.phishing.bestPct >= 90 }
+    ]
+  });
 })(window.App);

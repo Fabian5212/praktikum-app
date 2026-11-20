@@ -12,17 +12,15 @@ window.App = window.App || { views: {}, games: {}, data: {} };
   // Grobe Obergrenze von localStorage in den meisten Browsern (ca. 5 MB, als UTF-16 gezählt)
   const LIMIT_BYTES = 5 * 1024 * 1024;
 
-  /** Bereiche der Praktikumswoche – Farbe kommt aus dem CSS (--it, --synchro …) */
-  const AREAS = {
-    it:      { label: 'IT-Service',      short: 'IT',      icon: 'monitor' },
-    synchro: { label: 'Synchronisation', short: 'Synchro', icon: 'mic' },
-    schnitt: { label: 'Schnitt',         short: 'Schnitt', icon: 'film' },
-    tonregie:{ label: 'Tonregie',        short: 'Tonregie', icon: 'sliders' },
-    anderes: { label: 'Anderes',         short: 'Anderes', icon: 'dots' }
-  };
+  /** Bereiche der Praktikumswoche (id -> { label, short, icon, color, today }) – füllt registry.js aus bereiche/*.js */
+  const AREAS = {};
 
-  /** Alle Minispiele in Anzeige-Reihenfolge. Neues Spiel: hier eintragen + games.<id> in defaults() */
-  const GAMES = ['kabel', 'tickets', 'phishing', 'pc', 'tonregie'];
+  /** Ids der Minispiele in Anzeige-Reihenfolge – füllt registry.js aus games/*.js (Reihenfolge aus js/config.js) */
+  const GAMES = [];
+
+  /** Grundwerte des Spielstands je Spiel (plays, best, bestPct + eigene Felder aus save) */
+  const SAVES = {};
+  const copy = x => JSON.parse(JSON.stringify(x));
 
   /** Leerer Anfangszustand. Neue Felder hier ergänzen – merge() füllt sie bei alten Daten auf. */
   function defaults() {
@@ -31,13 +29,7 @@ window.App = window.App || { views: {}, games: {}, data: {} };
       name: '',
       startDate: '',                 // Montag der Praktikumswoche (JJJJ-MM-TT)
       plan: ['', '', '', '', ''],    // Bereich pro Tag Mo–Fr
-      games: {
-        kabel:    { plays: 0, best: 0, bestPct: 0, levels: [0, 0, 0, 0, 0] },
-        tickets:  { plays: 0, best: 0, bestPct: 0, bestCombo: 0 },
-        phishing: { plays: 0, best: 0, bestPct: 0 },
-        pc:       { plays: 0, best: 0, bestPct: 0, perfect: false },
-        tonregie: { plays: 0, best: 0, bestPct: 0 }
-      },
+      games: copy(SAVES),            // id -> Spielstand, Felder kommen aus App.addGame({ save })
       badges: {},                    // id -> Datum der Freischaltung
       diary: {},                     // "0".."4" -> Eintrag (siehe tagebuch.js)
       notes: '',                     // alt: Notizen für die ganze Woche, jetzt pro Tag in diary[i].notes (siehe migrate)
@@ -125,6 +117,12 @@ window.App = window.App || { views: {}, games: {}, data: {} };
     LIMIT_BYTES,
 
     get: () => state,
+
+    /** Spielstand eines Spiels anlegen bzw. alte Daten um neue Felder ergänzen (aufgerufen von App.addGame) */
+    addSave(id, save) {
+      SAVES[id] = Object.assign({ plays: 0, best: 0, bestPct: 0 }, save);
+      state.games[id] = merge(copy(SAVES[id]), state.games[id]);
+    },
 
     /**
      * Ändert den Zustand über eine Funktion und speichert.

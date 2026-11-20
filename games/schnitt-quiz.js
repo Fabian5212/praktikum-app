@@ -1,0 +1,60 @@
+/*
+ * schnitt-quiz.js – Quiz „Schnitt-Check“ (Bereich Schnitt)
+ * Beispiel für ein Quiz ohne eigene Spiel-Logik: nur Fragen, den Rest macht js/quiz.js.
+ * Format: { q: Frage, ok: richtige Antwort, wrong: [falsche Antworten], why: Erklärung }
+ */
+App.addQuiz({
+  id: 'schnitt-quiz',
+  title: 'Schnitt-Check',
+  area: 'schnitt',
+  icon: 'film',
+  topic: 'Schnitt',
+  teaser: 'Rohschnitt, B-Roll, Rendern – kennst du dich aus?',
+  lead: 'Im Schnitt wird aus vielen Aufnahmen ein fertiger Film. Teste, ob du die wichtigsten Begriffe drauf hast.',
+  learn: 'Die Fachsprache im Schnitt und wie ein Film Schritt für Schritt entsteht.',
+  round: 8,
+  badge: { name: 'Cutter-Blick', desc: 'Alle Fragen im Schnitt-Check richtig beantwortet.', pct: 100 },
+
+  questions: [
+    { q: 'Was ist der Rohschnitt?',
+      ok: 'Die erste grobe Version des Films',
+      wrong: ['Der fertige Film fürs Fernsehen', 'Ungeschnittenes Material direkt von der Kamera', 'Ein Schnitt mit der Schere'],
+      why: 'Im Rohschnitt steht die Geschichte schon, aber Timing und Details fehlen noch. Danach kommt der Feinschnitt.' },
+    { q: 'Was zeigt die Timeline im Schnittprogramm?',
+      ok: 'Bild- und Tonclips in ihrer Reihenfolge',
+      wrong: ['Den Drehplan der ganzen Woche', 'Die Liste aller Mitarbeitenden', 'Wie lange das Rendern noch dauert'],
+      why: 'Auf der Zeitleiste legt man die Clips hintereinander und übereinander und baut so den Film.' },
+    { q: 'Wofür braucht man B-Roll?',
+      ok: 'Zusätzliche Bilder, die das Hauptgeschehen ergänzen',
+      wrong: ['Eine zweite Tonspur für Musik', 'Den Abspann am Ende', 'Eine Kamera auf Schienen'],
+      why: 'Spricht jemand im Interview, sieht man oft Bilder vom Ort oder vom Thema. Das ist B-Roll.' },
+    { q: 'Was passiert beim Rendern?',
+      ok: 'Der Computer berechnet aus allen Clips und Effekten eine fertige Videodatei',
+      wrong: ['Das Material wird gelöscht', 'Die Kamera wird aufgeladen', 'Der Film wird ins Englische übersetzt'],
+      why: 'Rendern kann lange dauern, weil jedes einzelne Bild neu berechnet wird.' },
+    { q: 'Wie viele Einzelbilder (Frames) hat eine Sekunde Film meistens?',
+      ok: '24 oder 25',
+      wrong: ['2 oder 3', '100', '1000'],
+      why: 'Kino nutzt meist 24, das Fernsehen in Europa 25 Bilder pro Sekunde. So wirkt die Bewegung flüssig.' },
+    { q: 'Wozu dient ein Proxy?',
+      ok: 'Eine kleine Arbeitskopie, damit der Schnittcomputer flüssig läuft',
+      wrong: ['Ein Ersatz-Cutter bei Krankheit', 'Ein Filter für die Farbe', 'Eine Sicherung gegen Viren'],
+      why: 'Mit Proxys schneidet man schneller. Für den fertigen Film wird am Ende das Originalmaterial genutzt.' },
+    { q: 'Was macht man bei der Farbkorrektur (Grading)?',
+      ok: 'Farben und Helligkeit angleichen und eine Stimmung erzeugen',
+      wrong: ['Falsche Wörter im Untertitel verbessern', 'Den Ton lauter machen', 'Die Reihenfolge der Szenen ändern'],
+      why: 'So passen Szenen zusammen, die zu unterschiedlichen Zeiten gedreht wurden.' },
+    { q: 'Welches Seitenverhältnis passt zu Videos, die man hochkant auf dem Handy schaut?',
+      ok: '9:16',
+      wrong: ['16:9', '4:3', '1:1'],
+      why: '16:9 ist das breite Format für TV, 9:16 dasselbe hochkant – passend für Handy-Videos.' },
+    { q: 'Was ist ein Jump Cut?',
+      ok: 'Ein Sprung innerhalb derselben Einstellung',
+      wrong: ['Ein Film über Sprungschanzen', 'Ein besonders langer Schnitt', 'Ein Fehler der Kamera'],
+      why: 'Jump Cuts wirken unruhig. Manchmal setzt man sie absichtlich ein, zum Beispiel in YouTube-Videos.' },
+    { q: 'Was bedeutet „Abnahme“?',
+      ok: 'Regie oder Kunde schauen den Film an und geben ihn frei',
+      wrong: ['Das Material wird von der Kamera abgezogen', 'Der Film wird kürzer gemacht', 'Die Lautstärke wird gesenkt'],
+      why: 'Erst nach der Abnahme gilt ein Film als fertig und darf gesendet oder veröffentlicht werden.' }
+  ]
+});

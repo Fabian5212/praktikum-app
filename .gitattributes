@@ -1,0 +1,4 @@
+# Zeilenenden einheitlich (LF), egal ob Windows, Mac oder Linux
+* text=auto eol=lf
+*.png binary
+*.jpg binary

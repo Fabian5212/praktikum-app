@@ -6,6 +6,8 @@
  * Farben nur über die Variablen in :root ändern.
  * Akzentfarbe eines Elements: Klasse .g-<spiel> oder .area-<bereich> setzt --a,
  * .glow lässt dann den linken Rand in dieser Farbe leuchten.
+ * Die Farben der Bereiche und Spiele stehen NICHT hier, sondern in bereiche/<id>.js bzw. games/<id>.js
+ * (color: …). js/registry.js macht daraus die Regeln .area-<id> und .g-<id>.
  */
 
 /* ========== 1. Farben & Grundwerte ========== */
@@ -33,13 +35,6 @@
   --ok: #2DD4AE;
   --bad: #FF5D6C;
 
-  /* Bereiche */
-  --it: var(--blue);
-  --synchro: var(--violet);
-  --schnitt: var(--amber);
-  --tonregie: var(--rose);
-  --anderes: #8A93AB;
-
   --radius: 26px;
   --radius-s: 16px;
   --shadow: 0 16px 40px rgba(0, 0, 0, .38);
@@ -49,18 +44,6 @@
   --font: 'Outfit', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   color-scheme: dark;
 }
-
-/* Akzentfarbe als lokale Variable --a */
-.area-it { --a: var(--it); }
-.area-synchro { --a: var(--synchro); }
-.area-schnitt { --a: var(--schnitt); }
-.area-tonregie { --a: var(--tonregie); }
-.area-anderes { --a: var(--anderes); }
-.g-kabel { --a: var(--teal); }
-.g-tickets { --a: var(--blue); }
-.g-phishing { --a: var(--amber); }
-.g-pc { --a: var(--violet); }
-.g-tonregie { --a: var(--rose); }
 
 /* Leuchtender linker Rand in der Akzentfarbe --a (für Karten aller Art).
    .card.… erhöht die Spezifität, damit die normale .card-Regel weiter unten das nicht überschreibt. */
@@ -319,8 +302,8 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 .export-text { font-size: 14px; }
 
 /* ========== 5. Startseite ========== */
-/* Ohne Bereich für heute: Markenfarbe */
-.hero:not(.area-it):not(.area-synchro):not(.area-schnitt):not(.area-tonregie):not(.area-anderes) { --a: var(--brand); }
+/* Ohne Bereich für heute: Markenfarbe (.area-<id> aus registry.js steht später und gewinnt) */
+.hero { --a: var(--brand); }
 .hero {
   position: relative; overflow: hidden;
   padding: 20px; margin-bottom: 14px;
@@ -388,6 +371,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
 }
 .stat:last-child:nth-child(odd) { grid-column: span 2; }   /* ungerade Anzahl Spiele: letzte Kachel volle Breite */
 .stat img { grid-row: span 2; width: 48px; height: 48px; -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent); mask-image: radial-gradient(closest-side, #000 70%, transparent); }
+.stat .art-ico { grid-row: span 2; width: 48px; height: 48px; }
 .stat b { font-size: 20px; font-weight: 700; line-height: 1.1; }
 .stat span { font-size: 12.5px; color: var(--muted); line-height: 1.2; }
 
@@ -427,6 +411,13 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--b
   -webkit-mask-image: radial-gradient(closest-side, #000 72%, transparent);
   mask-image: radial-gradient(closest-side, #000 72%, transparent);
 }
+/* Spiel ohne eigenes Bild: großes Symbol in der Akzentfarbe */
+.art-ico {
+  display: grid; place-items: center; width: 100%; height: 100%; border-radius: 50%;
+  color: color-mix(in srgb, var(--a, var(--brand)) 85%, #fff);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--a, var(--brand)) 32%, transparent), transparent);
+}
+.art-ico .ico { width: 46%; height: 46%; filter: drop-shadow(0 0 10px var(--a, var(--brand))); }
 .game-meta { display: flex; align-items: center; gap: 7px; font-size: 13.5px; font-weight: 500; color: color-mix(in srgb, var(--a) 85%, #fff); }
 .game-meta .ico { width: 17px; height: 17px; }
 .go {

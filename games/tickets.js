@@ -113,9 +113,16 @@
     return () => clearTimeout(timer);
   }
 
-  App.games.tickets = {
-    id: 'tickets', title: 'Ticket-Rush', icon: 'ticket', area: 'it', topic: 'IT-Support',
+  App.addGame({
+    id: 'tickets', title: 'Ticket-Rush', icon: 'ticket', area: 'it', topic: 'IT-Support', color: 'var(--blue)',
     teaser: 'Löse Störungen unter Zeitdruck.',
-    render
-  };
+    render,
+    save: { bestCombo: 0 },
+    badges: [
+      { id: 'ticket', name: 'Support-Held', icon: 'ticket', desc: 'Mindestens 10 von 12 Tickets richtig gelöst.',
+        test: s => s.games.tickets.bestPct >= 83 },
+      { id: 'combo', name: 'Combo-König', icon: 'flame', desc: '6 Tickets hintereinander richtig.',
+        test: s => s.games.tickets.bestCombo >= 6 }
+    ]
+  });
 })(window.App);

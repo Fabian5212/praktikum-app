@@ -7,15 +7,6 @@
   const { icon, esc, areaPill, WEEKDAYS, WD_SHORT } = App.ui;
   const AREAS = App.store.AREAS;
 
-  /** Kurzer Satz, was heute im Bereich passiert */
-  const TODAY_LINE = {
-    it: 'Heute schaust du dem IT-Service über die Schulter: Tickets, PCs, Netzwerk.',
-    synchro: 'Heute geht\'s ins Tonstudio: Hier bekommen Filme ihre deutschen Stimmen.',
-    schnitt: 'Heute im Schnitt: Aus vielen Aufnahmen wird ein fertiger Film.',
-    tonregie: 'Heute in der Tonregie beim WDR: Hier wird der Ton einer Sendung gesteuert – oft live.',
-    anderes: 'Heute steht etwas Besonderes an – schreib es nachher ins Tagebuch.'
-  };
-
   function greeting() {
     const h = new Date().getHours();
     return h < 11 ? 'Guten Morgen' : h < 17 ? 'Hallo' : 'Guten Abend';
@@ -31,9 +22,9 @@
       title = t.daysUntil === 1 ? 'Morgen geht\'s los!' : 'Noch ' + t.daysUntil + ' Tage';
       text = 'Dein Praktikum startet am ' + App.ui.formatDate(s.startDate, true) + '. Schau dich schon mal in den Spielen um.';
     } else if (t.phase === 'during') {
-      area = s.plan[t.index];
+      area = AREAS[s.plan[t.index]] ? s.plan[t.index] : '';
       title = 'Tag ' + (t.index + 1) + ' von 5 · ' + WEEKDAYS[t.index];
-      text = area ? TODAY_LINE[area] : 'Wo bist du heute? Tippe auf „Woche planen“.';
+      text = AREAS[area] ? AREAS[area].today : 'Wo bist du heute? Tippe auf „Woche planen“.';
     } else if (t.phase === 'weekend') {
       title = 'Wochenende!';
       text = 'Deine Praktikumswoche ist geschafft. Zeit fürs Tagebuch und dein Fazit.';
@@ -45,7 +36,7 @@
       '<div class="hero-top"><span class="eyebrow">Heute</span>' + (area ? areaPill(area, true) : '') + '</div>' +
       '<h2>' + esc(title) + '</h2><p>' + esc(text) + '</p>' +
       '<div class="week" role="list">' + WD_SHORT.map((d, i) => {
-        const a = s.plan[i];
+        const a = AREAS[s.plan[i]] ? s.plan[i] : '';   // Bereich gibt es evtl. nicht mehr
         const now = t.phase === 'during' && t.index === i;
         return '<button class="wday' + (a ? ' area-' + a : '') + (now ? ' now' : '') + '" data-plan role="listitem" aria-label="' + WEEKDAYS[i] + ': ' + (a ? AREAS[a].label : 'offen') + '">' +
           '<b>' + d + '</b><span>' + (a ? AREAS[a].short : '–') + '</span></button>';
@@ -73,7 +64,7 @@
       '<section class="card"><div class="card-head"><h2 class="h3">Dein Fortschritt</h2><span class="muted small">' + plays + (plays === 1 ? ' Spiel' : ' Spiele') + ' gespielt</span></div>' +
         '<div class="stats">' + games.map(k => {
           const g = App.games[k], st = s.games[k];
-          return '<a class="stat g-' + k + '" href="#/spiele/' + k + '"><img src="img/games/' + k + '.png" alt="" width="48" height="48">' +
+          return '<a class="stat g-' + k + '" href="#/spiele/' + k + '">' + App.ui.gameArt(k, 48) +
             '<b>' + (st.plays ? st.best : '–') + '</b><span>' + esc(g.title) + '</span></a>';
         }).join('') + '</div></section>' +
 

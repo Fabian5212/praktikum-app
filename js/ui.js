@@ -198,7 +198,7 @@
     if (reducedMotion()) return;
     const box = document.createElement('div');
     box.className = 'confetti';
-    const colors = ['var(--brand)', 'var(--accent)', 'var(--it)', 'var(--synchro)', 'var(--schnitt)'];
+    const colors = ['var(--brand)', 'var(--teal)', 'var(--blue)', 'var(--violet)', 'var(--amber)', 'var(--rose)'];
     for (let i = 0; i < 36; i++) {
       const s = document.createElement('i');
       s.style.left = Math.random() * 100 + '%';
@@ -233,7 +233,18 @@
     return a;
   }
 
-  /** Bereichs-Pill (IT / Synchro / Schnitt) */
+  /** Bild eines Spiels – oder sein Symbol, wenn es kein eigenes Bild hat (img: false in js/config.js) */
+  function gameArt(id, size) {
+    const g = App.games[id];
+    return g.img
+      ? '<img src="' + g.img + '" alt="" width="' + size + '" height="' + size + '">'
+      : '<span class="art-ico">' + icon(g.icon) + '</span>';
+  }
+
+  /** Eigene Icons ergänzen: App.ui.addIcons({ kamera: '<path d="…"/>' }) – 24×24, nur Linien (stroke) */
+  function addIcons(list) { Object.assign(P, list); }
+
+  /** Bereichs-Pill (IT / Synchro / Schnitt …) */
   function areaPill(key, long) {
     const a = App.store.AREAS[key];
     if (!a) return '<span class="pill">Noch offen</span>';
@@ -320,6 +331,6 @@
   const viewEl = document.getElementById('view');
   new MutationObserver(() => countUp(viewEl)).observe(viewEl, { childList: true, subtree: true });
 
-  App.ui = { icon, hydrateIcons, esc, toast, sheet, draggable, confetti, formatDate, debounce, shuffle, areaPill, pageHead, reducedMotion,
+  App.ui = { icon, addIcons, gameArt, hydrateIcons, esc, toast, sheet, draggable, confetti, formatDate, debounce, shuffle, areaPill, pageHead, reducedMotion,
              canTransition, transition, step, replay, WEEKDAYS, WD_SHORT };
 })(window.App);

@@ -187,10 +187,14 @@
     show();
   }
 
-  App.games.tonregie = {
-    id: 'tonregie', title: 'Live-Mix', icon: 'sliders', area: 'tonregie', topic: 'Tonregie',
+  App.addGame({
+    id: 'tonregie', title: 'Live-Mix', icon: 'sliders', area: 'tonregie', topic: 'Tonregie', color: 'var(--rose)',
     teaser: 'Misch eine Live-Sendung am Mischpult.',
     render,
+    badges: [
+      { id: 'tonmeister', name: 'Tonmeister', icon: 'sliders', desc: 'Mindestens 10 von 12 Live-Momenten richtig gemischt.',
+        test: s => s.games.tonregie.bestPct >= 83 }
+    ],
     SHOW, CHANNELS   // für Tests
-  };
+  });
 })(window.App);

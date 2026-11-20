@@ -1,6 +1,7 @@
 /*
  * badges.js – Abzeichen für Meilensteine.
- * Neues Abzeichen: Eintrag in LIST ergänzen. test(state) entscheidet, ob es freigeschaltet ist.
+ * Allgemeine Abzeichen stehen hier in LIST, Abzeichen zu einem Spiel in dessen Datei (App.addGame({ badges })).
+ * test(state) entscheidet, ob ein Abzeichen freigeschaltet ist.
  */
 (function (App) {
   'use strict';
@@ -8,20 +9,6 @@
   const LIST = [
     { id: 'start',      name: 'Eingecheckt',      icon: 'sparkle', desc: 'Du hast die App eingerichtet.',
       test: s => !!s.name },
-    { id: 'netzwerk',   name: 'Netzwerk-Profi',   icon: 'network', desc: 'Alle 5 Level in Kabel-Salat geschafft.',
-      test: s => s.games.kabel.levels.every(x => x > 0) },
-    { id: 'ticket',     name: 'Support-Held',     icon: 'ticket',  desc: 'Mindestens 10 von 12 Tickets richtig gelöst.',
-      test: s => s.games.tickets.bestPct >= 83 },
-    { id: 'combo',      name: 'Combo-König',      icon: 'flame',   desc: '6 Tickets hintereinander richtig.',
-      test: s => s.games.tickets.bestCombo >= 6 },
-    { id: 'phishing',   name: 'Phishing-Jäger',   icon: 'shield',  desc: 'Mindestens 9 von 10 Nachrichten richtig erkannt.',
-      test: s => s.games.phishing.bestPct >= 90 },
-    { id: 'schrauber',  name: 'Schrauber',        icon: 'cpu',     desc: 'Deinen ersten PC zusammengebaut.',
-      test: s => s.games.pc.plays > 0 },
-    { id: 'perfekt',    name: 'Ohne Fehler',      icon: 'star',    desc: 'Einen PC ganz ohne Fehler gebaut.',
-      test: s => s.games.pc.perfect },
-    { id: 'tonmeister', name: 'Tonmeister',       icon: 'sliders', desc: 'Mindestens 10 von 12 Live-Momenten richtig gemischt.',
-      test: s => s.games.tonregie.bestPct >= 83 },
     { id: 'allrounder', name: 'Allrounder',       icon: 'gamepad', desc: 'Alle Spiele mindestens einmal gespielt.',
       test: s => App.store.GAMES.every(k => s.games[k].plays > 0) },
     { id: 'schreiber',  name: 'Schreiberling',    icon: 'edit',    desc: 'Drei Tage im Tagebuch festgehalten.',
@@ -39,6 +26,12 @@
     return Object.values(s.diary).filter(d => d && d.did && d.did.trim()).length;
   }
 
+  /** Abzeichen eines Spiels ergänzen – sie erscheinen vor „Allrounder“ (aufgerufen von App.addGame) */
+  function add(list) {
+    const at = LIST.findIndex(b => b.id === 'allrounder');
+    LIST.splice(at < 0 ? LIST.length : at, 0, ...list.filter(b => !LIST.some(x => x.id === b.id)));
+  }
+
   /** Prüft alle Abzeichen und zeigt für neue einen Toast. Nach jeder Änderung aufrufen. */
   function check() {
     const s = App.store.get();
@@ -49,5 +42,5 @@
     App.ui.confetti();
   }
 
-  App.badges = { LIST, check, filledDays };
+  App.badges = { LIST, add, check, filledDays };
 })(window.App);

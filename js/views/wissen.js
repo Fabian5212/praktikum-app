@@ -6,7 +6,6 @@
   'use strict';
   const { icon, esc, areaPill } = App.ui;
   const AREAS = App.store.AREAS;
-  const KEYS = ['it', 'synchro', 'schnitt', 'tonregie'];
   let filter = '';   // gewählter Bereich im Wörterbuch ('' = alle)
 
   function tabs(cur) {
@@ -16,8 +15,11 @@
   }
 
   /* ---------- Bereiche ---------- */
+  // Nur Bereiche mit Inhalt erscheinen (z. B. „Anderes“ hat keine Wissensseite)
+  const withData = obj => Object.keys(AREAS).filter(k => obj[k]);
+
   function areasHtml() {
-    return KEYS.map(k => {
+    return withData(App.data.areas).map(k => {
       const a = App.data.areas[k];
       return '<details class="card area-card area-' + k + '"' + '>' +
         '<summary><span class="area-ico">' + icon(AREAS[k].icon) + '</span><span><b class="h3">' + esc(a.title) + '</b><span class="muted small">Was passiert dort?</span></span>' + icon('next', 'chev') + '</summary>' +
@@ -32,7 +34,7 @@
   function lexHtml() {
     return '<div class="search"><span class="search-ico">' + icon('search') + '</span>' +
       '<input id="lex-q" type="search" placeholder="Begriff suchen …" aria-label="Begriff suchen" autocomplete="off"></div>' +
-      '<div class="chips" id="lex-chips">' + [['', 'Alle']].concat(KEYS.map(k => [k, AREAS[k].short])).map(([k, l]) =>
+      '<div class="chips" id="lex-chips">' + [['', 'Alle']].concat(Object.keys(AREAS).filter(k => App.data.glossary.some(g => g[1] === k)).map(k => [k, AREAS[k].short])).map(([k, l]) =>
         '<button class="chip-btn' + (filter === k ? ' on' : '') + (k ? ' area-' + k : '') + '" data-filter="' + k + '">' + l + '</button>').join('') + '</div>' +
       '<p class="muted small" id="lex-count"></p><dl class="lex" id="lex-list"></dl>';
   }
@@ -52,7 +54,7 @@
   function questionsHtml() {
     const mine = App.store.get().questions.map(q => q.text);
     return '<p class="muted">Tippe auf <b>+</b>, um eine Frage auf deine Liste im Tagebuch zu setzen.</p>' +
-      KEYS.map(k => '<section class="card"><h2 class="h3">' + areaPill(k, true) + '</h2><ul class="qsuggest">' +
+      withData(App.data.questions).map(k => '<section class="card"><h2 class="h3">' + areaPill(k, true) + '</h2><ul class="qsuggest">' +
         App.data.questions[k].map(q => {
           const has = mine.includes(q);
           return '<li><span>' + esc(q) + '</span><button class="icon-btn small' + (has ? ' added' : '') + '" data-add="' + esc(q) + '" aria-label="' + (has ? 'Schon auf der Liste' : 'Zur Liste hinzufügen') + '"' + (has ? ' disabled' : '') + '>' + icon(has ? 'check' : 'plus') + '</button></li>';
@@ -61,7 +63,7 @@
 
   function render(view, params) {
     const sub = params[0] || '';
-    view.innerHTML = App.ui.pageHead('Wissen', 'IT, Synchro, Schnitt & Tonregie erklärt') + tabs(sub) +
+    view.innerHTML = App.ui.pageHead('Wissen', withData(App.data.areas).map(k => AREAS[k].short).join(', ').replace(/, ([^,]*)$/, ' & $1') + ' erklärt') + tabs(sub) +
       '<div class="wissen-body vt-swap">' + (sub === 'lexikon' ? lexHtml() : sub === 'fragen' ? questionsHtml() : areasHtml()) + '</div>';
 
     if (sub === 'lexikon') {

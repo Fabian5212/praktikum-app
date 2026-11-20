@@ -14,7 +14,7 @@
     intro(el, g) {
       el.innerHTML =
         '<div class="card intro glow">' +
-          '<div class="intro-art"><img src="img/games/' + el.dataset.game + '.png" alt="" width="140" height="140"></div>' +
+          '<div class="intro-art">' + App.ui.gameArt(el.dataset.game, 140) + '</div>' +
           '<p class="lead">' + esc(g.lead) + '</p>' +
           '<h2 class="h3">So geht\'s</h2><ul class="dots">' + g.how.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
           '<div class="learnbox">' + icon('bulb') + '<div><b>Das lernst du:</b> ' + esc(g.learn) + '</div></div>' +
@@ -49,7 +49,7 @@
       '<div class="game-list">' + ORDER.map((id, i) => {
         const g = App.games[id], st = s.games[id];
         return '<a class="game-card g-' + id + '" href="#/spiele/' + id + '" style="--i:' + i + '">' +
-          '<div class="game-art"><img src="img/games/' + id + '.png" alt="" width="96" height="96"></div>' +
+          '<div class="game-art">' + App.ui.gameArt(id, 96) + '</div>' +
           '<div class="game-txt"><span class="tag">' + esc(g.topic) + '</span><h2 class="h3">' + esc(g.title) + '</h2>' +
           '<p>' + esc(g.teaser) + '</p>' +
           '<div class="game-meta">' + (st.plays ? icon('trophy') + 'Rekord ' + st.best + ' · ' + st.plays + '× gespielt' : '<i class="status-dot"></i>Noch nicht gespielt') + '</div></div>' +
